@@ -6,13 +6,7 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 
-	let {
-		children,
-		data
-	}: {
-		children: import('svelte').Snippet;
-		data: { user: { id: string; email: string; displayName: string | null } | null };
-	} = $props();
+	let { children }: { children: import('svelte').Snippet } = $props();
 </script>
 
 <svelte:head>
@@ -20,7 +14,7 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col">
-	<Header user={data.user} />
+	<Header />
 	<main class="flex-1">
 		{@render children()}
 	</main>

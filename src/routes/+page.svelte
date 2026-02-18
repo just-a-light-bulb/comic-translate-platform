@@ -10,11 +10,9 @@
 	import ZapIcon from '@lucide/svelte/icons/zap';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import CheckIcon from '@lucide/svelte/icons/check';
+	import type { UserType } from '@kinde-oss/kinde-typescript-sdk';
 
-	let {
-		data
-	}: { data: { user: { id: string; email: string; displayName: string | null } | null } } =
-		$props();
+	let { data }: { data: { user: UserType | null } } = $props();
 </script>
 
 <svelte:head>

@@ -59,7 +59,7 @@
 		"vitest-browser-svelte": "^2.0.2"
 	},
 	"dependencies": {
-		"@stackframe/js": "^2.8.68",
+		"@kinde-oss/kinde-auth-sveltekit": "^2.2.3",
 		"postgres": "^3.4.8",
 		"zod": "^4.3.6"
 	}
