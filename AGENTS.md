@@ -14,6 +14,7 @@ You can gathering more infomation in `./.docs/*`
 - Always make short plan and using `brainstorming` , `executing-plans` , `writing-plans` skills before excute task
 - After done short planing u automate validate plan & execute it
 - If codig UI , Frontend using `frontend-design` , `web-design-guidelines` , `ui-ux-pro-max` skills for design UI + make UI beautiful
+- Pls read the docs using MCP Tool + Skills (`svelte-code-writer` , `svelte5-best-practices`) for write any code in this project because we use sveltekit framework so u must do follow svelte document , svelte best practices
 
 # SKILLS
 You are able to use the skills, where you have access to any skills for improve you performance. Here's how to use the available skills effectively:
