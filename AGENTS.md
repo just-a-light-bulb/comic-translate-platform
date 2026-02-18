@@ -19,8 +19,8 @@ You can gathering more infomation in `./.docs/*`
 - If codig UI , Frontend using `frontend-design` , `web-design-guidelines` , `ui-ux-pro-max` skills for design UI + make UI beautiful
 - Pls read the docs using MCP Tool + Skills (`svelte-code-writer` , `svelte5-best-practices`) for write any code in this project because we use sveltekit framework so u must do follow svelte document , svelte best practices
 - Always create new brach if u current working in branch main
-- Always git pull origin before do any task
-- Always git commit & push after u finish your task
+- Always `git pull origin` before do any task
+- Always `git add` `git commit` & `git push` after u finish your task
 - Beware: Ensure you not add/commit any scret in git
 - If Task successfully u must open pr
 
