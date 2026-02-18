@@ -23,7 +23,8 @@
 		"@eslint/compat": "^2.0.2",
 		"@eslint/js": "^9.39.2",
 		"@inlang/paraglide-js": "^2.10.0",
-		"@lucide/svelte": "^0.574.0",
+		"@internationalized/date": "^3.11.0",
+		"@lucide/svelte": "^0.561.0",
 		"@sveltejs/adapter-node": "^5.5.2",
 		"@sveltejs/kit": "^2.50.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
@@ -32,6 +33,7 @@
 		"@tailwindcss/vite": "^4.1.18",
 		"@types/node": "^24",
 		"@vitest/browser-playwright": "^4.0.18",
+		"bits-ui": "^2.15.7",
 		"clsx": "^2.1.1",
 		"drizzle-kit": "^0.31.8",
 		"drizzle-orm": "^0.45.1",
@@ -57,6 +59,8 @@
 		"vitest-browser-svelte": "^2.0.2"
 	},
 	"dependencies": {
-		"postgres": "^3.4.8"
+		"@kinde-oss/kinde-auth-sveltekit": "^2.2.3",
+		"postgres": "^3.4.8",
+		"zod": "^4.3.6"
 	}
 }

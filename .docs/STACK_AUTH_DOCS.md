@@ -1,10 +1,9 @@
 # Setup
+
 URL: /docs/getting-started/setup
 Source: /vercel/path0/docs/content/docs/(guides)/getting-started/setup.mdx
 
-
-
-***
+---
 
 ## title: Setup
 
@@ -12,10 +11,10 @@ Source: /vercel/path0/docs/content/docs/(guides)/getting-started/setup.mdx
 
 Before getting started, make sure you have a project set up for your chosen platform:
 
-* **Next.js**: A [Next.js project](https://nextjs.org/docs/getting-started/installation) using the app router (Stack Auth does not support the pages router on Next.js)
-* **React**: A [React project](https://react.dev/learn/creating-a-react-app) (we show examples with Vite)
-* **JavaScript**: A Node.js project with Express
-* **Python**: A Python environment with your chosen framework (Django, FastAPI, or Flask)
+- **Next.js**: A [Next.js project](https://nextjs.org/docs/getting-started/installation) using the app router (Stack Auth does not support the pages router on Next.js)
+- **React**: A [React project](https://react.dev/learn/creating-a-react-app) (we show examples with Vite)
+- **JavaScript**: A Node.js project with Express
+- **Python**: A Python environment with your chosen framework (Django, FastAPI, or Flask)
 
 We recommend using our **setup wizard** for JavaScript frameworks for a seamless installation experience. For Python, we recommend using the REST API approach.
 
@@ -99,6 +98,7 @@ We recommend using our **setup wizard** for JavaScript frameworks for a seamless
 
       * `stack/server.ts`: Contains the `stackServerApp` configuration
     </Steps>
+
   </TabsContent>
 
   <TabsContent value="manual">
@@ -531,6 +531,7 @@ We recommend using our **setup wizard** for JavaScript frameworks for a seamless
         ### Done!
       </Step>
     </Steps>
+
   </TabsContent>
 </Tabs>
 
@@ -629,14 +630,14 @@ Here are some basic usage examples for each platform:
 **Server Component:**
 
 ```typescript title="Server Component"
-import { stackServerApp } from "@/stack/server";
+import { stackServerApp } from '@/stack/server';
 
 // In a Server Component or API route
 const user = await stackServerApp.getUser();
 if (user) {
-  console.log("User is signed in:", user.displayName);
+	console.log('User is signed in:', user.displayName);
 } else {
-  console.log("User is not signed in");
+	console.log('User is not signed in');
 }
 ```
 
@@ -648,7 +649,7 @@ import { useUser } from "@stackframe/stack";
 
 export default function MyComponent() {
   const user = useUser();
-  
+
   if (user) {
     return <div>Hello, {user.displayName}!</div>;
   } else {
@@ -664,7 +665,7 @@ import { useUser } from "@stackframe/react";
 
 export default function MyComponent() {
   const user = useUser();
-  
+
   if (user) {
     return <div>Hello, {user.displayName}!</div>;
   } else {
@@ -676,42 +677,42 @@ export default function MyComponent() {
 **server.ts:**
 
 ```typescript title="server.ts"
-import { stackServerApp } from "./stack/server.js";
+import { stackServerApp } from './stack/server.js';
 
 app.get('/profile', async (req, res) => {
-  try {
-    // Get access token from request headers
-    const accessToken = req.headers['x-stack-access-token'];
-    const user = await stackServerApp.getUser({ accessToken });
-    
-    if (user) {
-      res.json({ message: `Hello, ${user.displayName}!` });
-    } else {
-      res.status(401).json({ error: 'Not authenticated' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
+	try {
+		// Get access token from request headers
+		const accessToken = req.headers['x-stack-access-token'];
+		const user = await stackServerApp.getUser({ accessToken });
+
+		if (user) {
+			res.json({ message: `Hello, ${user.displayName}!` });
+		} else {
+			res.status(401).json({ error: 'Not authenticated' });
+		}
+	} catch (error) {
+		res.status(500).json({ error: 'Server error' });
+	}
 });
 ```
 
 **index.js:**
 
 ```javascript title="index.js"
-import { stackServerApp } from "./stack/server.js";
+import { stackServerApp } from './stack/server.js';
 
 async function checkUser(accessToken) {
-  try {
-    const user = await stackServerApp.getUser({ accessToken });
-    
-    if (user) {
-      console.log(`Hello, ${user.displayName}!`);
-    } else {
-      console.log('User not authenticated');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
+	try {
+		const user = await stackServerApp.getUser({ accessToken });
+
+		if (user) {
+			console.log(`Hello, ${user.displayName}!`);
+		} else {
+			console.log('User not authenticated');
+		}
+	} catch (error) {
+		console.error('Error:', error);
+	}
 }
 ```
 
@@ -722,7 +723,7 @@ async function checkUser(accessToken) {
 def profile_view(request):
     # Get access token from request headers
     access_token = request.headers.get('X-Stack-Access-Token')
-    
+
     try:
         user_data = stack_auth_request('GET', '/api/v1/users/me', headers={
             'x-stack-access-token': access_token,
@@ -743,7 +744,7 @@ app = FastAPI()
 async def get_profile(x_stack_access_token: str = Header(None)):
     if not x_stack_access_token:
         raise HTTPException(status_code=401, detail="Access token required")
-    
+
     try:
         user_data = stack_auth_request('GET', '/api/v1/users/me', headers={
             'x-stack-access-token': x_stack_access_token,
@@ -763,10 +764,10 @@ app = Flask(__name__)
 @app.route('/profile')
 def profile():
     access_token = request.headers.get('X-Stack-Access-Token')
-    
+
     if not access_token:
         return jsonify({'error': 'Access token required'}), 401
-    
+
     try:
         user_data = stack_auth_request('GET', '/api/v1/users/me', headers={
     'x-stack-access-token': access_token,
@@ -782,3 +783,135 @@ Next up, we will show you how to [retrieve and update user information](./users.
 
 For Python developers, check out the [REST API documentation](../rest-api/overview.mdx) to learn more about the available endpoints and how to use them in your Python application.
 
+---
+
+# OAuth
+
+URL: /docs/apps/oauth
+Source: /vercel/path0/docs/content/docs/(guides)/apps/oauth.mdx
+
+Managing third-party OAuth access tokens
+
+---
+
+title: OAuth
+description: Managing third-party OAuth access tokens
+icon: Shield
+
+---
+
+Stack has good support for working with OAuth and OIDC providers, such as Google, Facebook, Microsoft, and others.
+
+Beyond using OAuth for signing in, Stack can manage your users' access token so you can invoke APIs on their behalf. For example, you can use this to send emails with Gmail, access repositories on GitHub, or access files on OneDrive.
+
+A connected account is simply an external account that is linked to the user in some way. If you are not using shared keys (see note below), any user created with "Sign up with OAuth" is automatically connected to the account they signed up with, but it's also possible to connect a user with a provider that is unavailable for sign in.
+
+<Info>
+  You cannot connect a user's accounts with shared OAuth keys. You need to set up your own OAuth client ID and client secret in Stack's dashboard. For more details, check [Going to Production](../getting-started/production#oauth-providers).
+</Info>
+
+## Connecting with OAuth providers
+
+You can access a user's connected account with the `user.getConnectedAccount(providerId)` function or `user.useConnectedAccount(providerId)` hook.
+
+Often, you'll want to redirect the user to the OAuth provider's authorization page if they have not connected the account yet. Just like the `getUser(...)` function, `getConnectedAccount(...)` can also take an `{ or: "redirect" }` argument to achieve this.
+
+Here's how to connect with Google:
+
+```jsx
+'use client';
+
+import { useUser } from '@stackframe/stack';
+
+export default function Page() {
+	const user = useUser({ or: 'redirect' });
+	// Redirects to Google authorization if not already connected
+	const account = user.useConnectedAccount('google', { or: 'redirect' });
+	// Account is always defined because of the redirect
+	return <div>Google account connected</div>;
+}
+```
+
+## Providing scopes
+
+Most providers have access control in the form of OAuth scopes. These are the permissions that the user will see on the authorization screen (eg. "Your App wants access to your calendar"). For instance, to read Google Drive content, you need the `https://www.googleapis.com/auth/drive.readonly` scope:
+
+```jsx
+'use client';
+
+import { useUser } from '@stackframe/stack';
+
+export default function Page() {
+	const user = useUser({ or: 'redirect' });
+	// Redirects to the Google authorization page, requesting access to Google Drive
+	const account = user.useConnectedAccount('google', {
+		or: 'redirect',
+		scopes: ['https://www.googleapis.com/auth/drive.readonly']
+	});
+	// Account is always defined because of the redirect
+	return <div>Google Drive connected</div>;
+}
+```
+
+Check your provider's API documentation to find a list of available scopes.
+
+## Retrieving the access token
+
+Once connected with an OAuth provider, obtain the access token with the `account.getAccessToken()` function. Check your provider's API documentation to understand how you can use this token to authorize the user in requests.
+
+```jsx
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useUser } from "@stackframe/stack";
+
+export default function Page() {
+  const user = useUser({ or: 'redirect' });
+  const account = user.useConnectedAccount('google', { or: 'redirect', scopes: ['https://www.googleapis.com/auth/drive.readonly'] });
+  const { accessToken } = account.useAccessToken();
+  const [response, setResponse] = useState<any>();
+
+  useEffect(() => {
+    fetch('https://www.googleapis.com/drive/v3/files', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+      .then((res) => res.json())
+      .then((data) => setResponse(data))
+      .catch((err) => console.error(err));
+  }, [accessToken]);
+
+  return <div>{response ? JSON.stringify(response) : 'Loading...'}</div>;
+}
+```
+
+## Sign-in default scopes
+
+To avoid showing the authorization page twice, you can already request scopes during the sign-in flow. This approach is optional. Some applications may prefer to request extra permissions only when needed, while others might want to obtain all necessary permissions upfront.
+
+To do this, edit the `oauthScopesOnSignIn` setting of your `stackServerApp`:
+
+```jsx title='stack/server.ts'
+export const stackServerApp = new StackServerApp({
+	// ...your other settings...
+	oauthScopesOnSignIn: {
+		google: ['https://www.googleapis.com/authdrive.readonly']
+	}
+});
+```
+
+## OAuth account merging strategies
+
+When a user attempts to sign in with an OAuth provider that matches an existing account, Stack provides different strategies for handling the authentication flow.
+
+The available strategies are:
+
+- Allow duplicates (legacy default)
+- Link method (new default)
+- Block duplicates (most secure)
+
+The "Link" strategy is the default behavior. If a user attempts to sign in with an OAuth provider that matches an existing account, Stack will link the OAuth identity to the existing account, and the user will be signed into that account.
+This requires both of the credentials to be verified, or otherwise the link will be blocked, in the same way as the "Block" strategy.
+
+The "Allow" strategy is the default behavior for old projects. If a user attempts to sign in with an OAuth provider that has an existing account with the same email address, Stack will create a separate account for the user.
+
+The "Block" strategy will explicitly raise an error if a user attempts to sign in with an OAuth provider that matches an existing account.

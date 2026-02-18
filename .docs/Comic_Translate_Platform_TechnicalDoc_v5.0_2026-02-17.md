@@ -4,7 +4,7 @@ Technical Documentation & Architecture Blueprint
 
 Version 5.0 | February 17, 2026
 
-*Prepared by: Nexus - Systems Analyst & Project Manager*
+_Prepared by: Nexus - Systems Analyst & Project Manager_
 
 # Table of Contents
 
@@ -54,7 +54,7 @@ Version 5.0 | February 17, 2026
 
 8. References 24
 
-*Note: To update page numbers, right-click the Table of Contents and select "Update Field."*
+_Note: To update page numbers, right-click the Table of Contents and select "Update Field."_
 
 # 1. Introduction
 
@@ -85,7 +85,6 @@ The following open-source applications serve as reference implementations for ma
 Repository:
 
 > https://github.com/zyddnys/manga-image-translator
-> 
 
 ### 2.1.1 Overview
 
@@ -93,16 +92,16 @@ manga-image-translator is an open-source project designed to translate text with
 
 ### 2.1.2 Core Features
 
-| **Feature** | **Description** | **Technical Implementation** |
-| --- | --- | --- |
-| OCR Engine | Detects and extracts text from manga images | manga-ocr, Tesseract, PaddleOCR, Google Cloud Vision |
-| Translation | Translates extracted text to target language | Google Translate, DeepL, GPT-4, NLLB |
-| Inpainting | Removes original text and fills background | LaMa, Stable Diffusion, OpenCV |
-| Text Rendering | Renders translated text onto image | PIL/Pillow with custom font handling |
-| Batch Processing | Processes multiple images in sequence | Command-line interface with file I/O |
-| Web Interface | Optional web UI for image upload | Gradio-based web application |
+| **Feature**      | **Description**                              | **Technical Implementation**                         |
+| ---------------- | -------------------------------------------- | ---------------------------------------------------- |
+| OCR Engine       | Detects and extracts text from manga images  | manga-ocr, Tesseract, PaddleOCR, Google Cloud Vision |
+| Translation      | Translates extracted text to target language | Google Translate, DeepL, GPT-4, NLLB                 |
+| Inpainting       | Removes original text and fills background   | LaMa, Stable Diffusion, OpenCV                       |
+| Text Rendering   | Renders translated text onto image           | PIL/Pillow with custom font handling                 |
+| Batch Processing | Processes multiple images in sequence        | Command-line interface with file I/O                 |
+| Web Interface    | Optional web UI for image upload             | Gradio-based web application                         |
 
-*Table 1: manga-image-translator Core Features*
+_Table 1: manga-image-translator Core Features_
 
 ### 2.1.3 Technical Architecture
 
@@ -132,7 +131,6 @@ The manga-image-translator project provides several patterns directly applicable
 Repository:
 
 > https://github.com/PantsuDango/Dango-Translator
-> 
 
 ### 2.2.1 Overview
 
@@ -140,16 +138,16 @@ Dango-Translator is a desktop application designed for translating raw manga (of
 
 ### 2.2.2 Core Features
 
-| **Feature** | **Description** | **Technical Implementation** |
-| --- | --- | --- |
-| OCR Integration | Text detection and extraction | Tesseract OCR with manga-ocr support |
-| Interactive Editor | Manual text box adjustment | Qt-based GUI with drag-and-drop |
-| Translation APIs | Multiple translation service support | Baidu, Google, DeepL, GPT APIs |
-| Project Management | Organize translation projects | Local file-based project storage |
-| Glossary Support | Custom terminology management | User-defined dictionary system |
-| Export Options | Multiple output formats | Image export, text export, project backup |
+| **Feature**        | **Description**                      | **Technical Implementation**              |
+| ------------------ | ------------------------------------ | ----------------------------------------- |
+| OCR Integration    | Text detection and extraction        | Tesseract OCR with manga-ocr support      |
+| Interactive Editor | Manual text box adjustment           | Qt-based GUI with drag-and-drop           |
+| Translation APIs   | Multiple translation service support | Baidu, Google, DeepL, GPT APIs            |
+| Project Management | Organize translation projects        | Local file-based project storage          |
+| Glossary Support   | Custom terminology management        | User-defined dictionary system            |
+| Export Options     | Multiple output formats              | Image export, text export, project backup |
 
-*Table 2: Dango-Translator Core Features*
+_Table 2: Dango-Translator Core Features_
 
 ### 2.2.3 User Interface Design
 
@@ -175,17 +173,17 @@ Dango-Translator provides UI/UX patterns relevant to the Comic Translate Platfor
 
 Analysis of both reference applications reveals common patterns and features essential for a manga translation platform. The following table summarizes key takeaways for implementation:
 
-| **Aspect** | **manga-image-translator** | **Dango-Translator** | **Comic Translate Platform Approach** |
-| --- | --- | --- | --- |
-| Deployment | Web/CLI, Docker support | Desktop application | Web-based (SvelteKit) with optional desktop wrapper |
-| OCR Engine | Multiple options, modular | Tesseract-based | User-selectable: PaddleOCR, manga-ocr, Tesseract |
-| Translation | API-based, offline models | Multiple API support | OpenRouter + BYOK + self-hosted options |
-| Inpainting | LaMa, Stable Diffusion | Limited/basic | User-selectable: LaMa, OpenCV.js, SD |
-| UI Paradigm | Pipeline-focused, minimal UI | Interactive editor | Hybrid: pipeline + interactive grid editor |
-| Editing | Limited manual override | Full interactive editing | Grid-based editing + canvas manipulation |
-| Project Mgmt | File-based batch | Project files | Database-backed with chapter hierarchy |
+| **Aspect**   | **manga-image-translator**   | **Dango-Translator**     | **Comic Translate Platform Approach**               |
+| ------------ | ---------------------------- | ------------------------ | --------------------------------------------------- |
+| Deployment   | Web/CLI, Docker support      | Desktop application      | Web-based (SvelteKit) with optional desktop wrapper |
+| OCR Engine   | Multiple options, modular    | Tesseract-based          | User-selectable: PaddleOCR, manga-ocr, Tesseract    |
+| Translation  | API-based, offline models    | Multiple API support     | OpenRouter + BYOK + self-hosted options             |
+| Inpainting   | LaMa, Stable Diffusion       | Limited/basic            | User-selectable: LaMa, OpenCV.js, SD                |
+| UI Paradigm  | Pipeline-focused, minimal UI | Interactive editor       | Hybrid: pipeline + interactive grid editor          |
+| Editing      | Limited manual override      | Full interactive editing | Grid-based editing + canvas manipulation            |
+| Project Mgmt | File-based batch             | Project files            | Database-backed with chapter hierarchy              |
 
-*Table 3: Comparative Analysis of Reference Applications*
+_Table 3: Comparative Analysis of Reference Applications_
 
 The Comic Translate Platform combines the best aspects of both reference applications: the automated pipeline efficiency of manga-image-translator with the interactive editing capabilities of Dango-Translator. By leveraging modern web technologies (SvelteKit, Drizzle ORM), the platform achieves these capabilities while maintaining accessibility through a browser-based interface.
 
@@ -201,42 +199,42 @@ Drawing from the analysis of manga-image-translator and Dango-Translator, the pl
 
 ## 3.2 Business Goals & Success Metrics
 
-| **Objective** | **Target Metric** | **Measurement Method** |
-| --- | --- | --- |
-| Unified Workflow | Reduce application switching by 100% | Before/after workflow audit |
-| Translation Productivity | 40-60% time reduction per chapter | Time tracking per project |
-| OCR Accuracy | >95% character recognition rate | Manual correction frequency |
-| Translation Quality | >85% user satisfaction score | Post-project surveys |
-| System Reliability | 99.5% uptime SLA | Infrastructure monitoring |
-| Performance | Lighthouse score >90 | Automated performance testing |
+| **Objective**            | **Target Metric**                    | **Measurement Method**        |
+| ------------------------ | ------------------------------------ | ----------------------------- |
+| Unified Workflow         | Reduce application switching by 100% | Before/after workflow audit   |
+| Translation Productivity | 40-60% time reduction per chapter    | Time tracking per project     |
+| OCR Accuracy             | >95% character recognition rate      | Manual correction frequency   |
+| Translation Quality      | >85% user satisfaction score         | Post-project surveys          |
+| System Reliability       | 99.5% uptime SLA                     | Infrastructure monitoring     |
+| Performance              | Lighthouse score >90                 | Automated performance testing |
 
-*Table 4: Business Objectives and Success Metrics*
+_Table 4: Business Objectives and Success Metrics_
 
 ## 3.3 User Personas
 
 ### 3.3.1 Persona: Casual Manga Reader
 
-| **Attribute** | **Description** |
-| --- | --- |
-| Profile | Nattaya, 24-year-old Thai university student |
-| Background | Enjoys Japanese manga with limited Japanese proficiency (JLPT N4-N5). Currently relies on Google Translate screenshots. |
-| Pain Points | Poor translation quality, incorrect honorifics, inability to understand character relationships. |
-| Goals | Read manga with natural Thai translation, quickly fix minor errors, access variety of titles. |
-| Tech Proficiency | High - comfortable with web applications and mobile apps. |
+| **Attribute**    | **Description**                                                                                                         |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Profile          | Nattaya, 24-year-old Thai university student                                                                            |
+| Background       | Enjoys Japanese manga with limited Japanese proficiency (JLPT N4-N5). Currently relies on Google Translate screenshots. |
+| Pain Points      | Poor translation quality, incorrect honorifics, inability to understand character relationships.                        |
+| Goals            | Read manga with natural Thai translation, quickly fix minor errors, access variety of titles.                           |
+| Tech Proficiency | High - comfortable with web applications and mobile apps.                                                               |
 
-*Table 5: Casual Reader Persona Profile*
+_Table 5: Casual Reader Persona Profile_
 
 ### 3.3.2 Persona: Professional Translator
 
-| **Attribute** | **Description** |
-| --- | --- |
-| Profile | Tanaka, 32-year-old freelance manga translator |
-| Background | 5 years experience translating Japanese manga to Thai. Processes 50-100 pages weekly. |
-| Pain Points | Fragmented workflow (Excel + Photoshop + Canva), manual text extraction, no translation memory. |
-| Goals | Reduce translation time by 50%, maintain consistent terminology, export publication-ready files. |
-| Tech Proficiency | Expert - proficient in Photoshop, Excel, translation tools. |
+| **Attribute**    | **Description**                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------ |
+| Profile          | Tanaka, 32-year-old freelance manga translator                                                   |
+| Background       | 5 years experience translating Japanese manga to Thai. Processes 50-100 pages weekly.            |
+| Pain Points      | Fragmented workflow (Excel + Photoshop + Canva), manual text extraction, no translation memory.  |
+| Goals            | Reduce translation time by 50%, maintain consistent terminology, export publication-ready files. |
+| Tech Proficiency | Expert - proficient in Photoshop, Excel, translation tools.                                      |
 
-*Table 6: Professional Translator Persona Profile*
+_Table 6: Professional Translator Persona Profile_
 
 ## 3.4 User Stories
 
@@ -292,72 +290,72 @@ The technology stack is based on the project's existing implementation, leveragi
 
 ### 4.1.1 Core Framework
 
-| **Component** | **Technology** | **Version** | **Purpose** |
-| --- | --- | --- | --- |
-| Framework | SvelteKit | 2.50.2 | Full-stack framework with SSR, routing, and API routes |
-| UI Library | Svelte 5 | 5.49.2 | Compile-time reactive UI with runes API |
-| Runtime | Node.js Adapter | 5.5.2 | Server deployment via @sveltejs/adapter-node |
-| Build Tool | Vite | 7.3.1 | Fast development server and production builds |
-| Language | TypeScript | 5.9.3 | End-to-end type safety |
+| **Component** | **Technology**  | **Version** | **Purpose**                                            |
+| ------------- | --------------- | ----------- | ------------------------------------------------------ |
+| Framework     | SvelteKit       | 2.50.2      | Full-stack framework with SSR, routing, and API routes |
+| UI Library    | Svelte 5        | 5.49.2      | Compile-time reactive UI with runes API                |
+| Runtime       | Node.js Adapter | 5.5.2       | Server deployment via @sveltejs/adapter-node           |
+| Build Tool    | Vite            | 7.3.1       | Fast development server and production builds          |
+| Language      | TypeScript      | 5.9.3       | End-to-end type safety                                 |
 
-*Table 7: Core Framework Stack*
+_Table 7: Core Framework Stack_
 
 ### 4.1.2 Database Layer
 
-| **Component** | **Technology** | **Version** | **Purpose** |
-| --- | --- | --- | --- |
-| Database | PostgreSQL | Latest | Relational database for structured data |
-| Driver | postgres.js | 3.4.8 | Fast PostgreSQL client with tagged templates |
-| ORM | Drizzle ORM | 0.45.1 | Type-safe SQL query builder with migrations |
-| Migrations | Drizzle Kit | 0.31.8 | Schema management and migration tooling |
+| **Component** | **Technology** | **Version** | **Purpose**                                  |
+| ------------- | -------------- | ----------- | -------------------------------------------- |
+| Database      | PostgreSQL     | Latest      | Relational database for structured data      |
+| Driver        | postgres.js    | 3.4.8       | Fast PostgreSQL client with tagged templates |
+| ORM           | Drizzle ORM    | 0.45.1      | Type-safe SQL query builder with migrations  |
+| Migrations    | Drizzle Kit    | 0.31.8      | Schema management and migration tooling      |
 
-*Table 8: Database Layer Stack*
+_Table 8: Database Layer Stack_
 
 ### 4.1.3 Styling & UI
 
-| **Component** | **Technology** | **Version** | **Purpose** |
-| --- | --- | --- | --- |
-| CSS Framework | Tailwind CSS | 4.1.18 | Utility-first CSS with JIT compilation |
-| Forms Plugin | @tailwindcss/forms | 0.5.11 | Pre-styled form elements |
-| Typography Plugin | @tailwindcss/typography | 0.5.19 | Prose styles for rich content |
+| **Component**     | **Technology**          | **Version** | **Purpose**                            |
+| ----------------- | ----------------------- | ----------- | -------------------------------------- |
+| CSS Framework     | Tailwind CSS            | 4.1.18      | Utility-first CSS with JIT compilation |
+| Forms Plugin      | @tailwindcss/forms      | 0.5.11      | Pre-styled form elements               |
+| Typography Plugin | @tailwindcss/typography | 0.5.19      | Prose styles for rich content          |
 
-*Table 9: Styling Stack*
+_Table 9: Styling Stack_
 
 ### 4.1.4 Testing & Quality
 
-| **Component** | **Technology** | **Version** | **Purpose** |
-| --- | --- | --- | --- |
-| Test Runner | Vitest | 4.0.18 | Vite-native unit testing framework |
-| Browser Testing | Playwright | 1.58.1 | Cross-browser E2E testing |
-| Linting | ESLint | 9.39.2 | Code quality enforcement |
-| Formatting | Prettier | 3.8.1 | Consistent code style |
-| Type Checking | svelte-check | 4.3.6 | Svelte TypeScript validation |
+| **Component**   | **Technology** | **Version** | **Purpose**                        |
+| --------------- | -------------- | ----------- | ---------------------------------- |
+| Test Runner     | Vitest         | 4.0.18      | Vite-native unit testing framework |
+| Browser Testing | Playwright     | 1.58.1      | Cross-browser E2E testing          |
+| Linting         | ESLint         | 9.39.2      | Code quality enforcement           |
+| Formatting      | Prettier       | 3.8.1       | Consistent code style              |
+| Type Checking   | svelte-check   | 4.3.6       | Svelte TypeScript validation       |
 
-*Table 10: Testing & Quality Stack*
+_Table 10: Testing & Quality Stack_
 
 ### 4.1.5 External Services
 
-| **Service** | **Provider** | **Free Tier** | **Purpose** |
-| --- | --- | --- | --- |
-| Authentication | Stack Auth | 5,000 MAU | OAuth + email/password authentication |
-| File Storage | Uploadcare | 3GB storage | Image upload and CDN delivery |
-| Deployment | Vercel / Node Host | 100GB bandwidth | Production hosting |
-| AI Gateway | OpenRouter | Free models | LLM API access (GLM-4, Qwen) |
+| **Service**    | **Provider**       | **Free Tier**   | **Purpose**                           |
+| -------------- | ------------------ | --------------- | ------------------------------------- |
+| Authentication | Stack Auth         | 5,000 MAU       | OAuth + email/password authentication |
+| File Storage   | Uploadcare         | 3GB storage     | Image upload and CDN delivery         |
+| Deployment     | Vercel / Node Host | 100GB bandwidth | Production hosting                    |
+| AI Gateway     | OpenRouter         | Free models     | LLM API access (GLM-4, Qwen)          |
 
-*Table 11: External Services Stack*
+_Table 11: External Services Stack_
 
 ### 4.1.6 AI/ML Services (User-Selectable)
 
 Following the pattern established by manga-image-translator, the platform supports multiple AI/ML providers with user-selectable options. This flexibility enables users to choose providers based on cost, accuracy, and performance requirements.
 
-| **Capability** | **Options** | **Inspiration Source** |
-| --- | --- | --- |
-| OCR | PaddleOCR, manga-ocr, Tesseract | manga-image-translator multi-engine support |
-| Translation | OpenRouter, GLM-4, Cohere, Ollama | Both reference apps multi-provider pattern |
-| Character Detection | Vision models via OpenRouter, Ollama | Context-aware translation requirement |
-| Inpainting | LaMa (self-hosted), OpenCV.js (browser) | manga-image-translator inpainting options |
+| **Capability**      | **Options**                             | **Inspiration Source**                      |
+| ------------------- | --------------------------------------- | ------------------------------------------- |
+| OCR                 | PaddleOCR, manga-ocr, Tesseract         | manga-image-translator multi-engine support |
+| Translation         | OpenRouter, GLM-4, Cohere, Ollama       | Both reference apps multi-provider pattern  |
+| Character Detection | Vision models via OpenRouter, Ollama    | Context-aware translation requirement       |
+| Inpainting          | LaMa (self-hosted), OpenCV.js (browser) | manga-image-translator inpainting options   |
 
-*Table 12: AI/ML Services Options*
+_Table 12: AI/ML Services Options_
 
 ## 4.2 High-Level Architecture
 
@@ -374,17 +372,17 @@ Architecture Components:
 
 The database schema follows a hierarchical structure optimized for manga translation workflow. The design supports both automated processing and interactive editing patterns observed in reference applications.
 
-| **Entity** | **Key Fields** | **Description** |
-| --- | --- | --- |
-| User | id, email, displayName, role, createdAt | Account information |
-| Project | id, title, sourceLang, targetLang, status, ownerId | Translation project container |
-| Chapter | id, number, title, projectId, pageCount | Organizational unit |
-| Page | id, number, chapterId, imageUrl, width, height, ocrStatus | Manga page |
-| TextElement | id, pageId, originalText, translatedText, bbox, fontConfig, status | Detected text |
-| Glossary | id, projectId, sourceTerm, targetTerm, notes | Terminology (Dango pattern) |
-| AIProvider | id, userId, provider, apiKey, settings | User AI configuration |
+| **Entity**  | **Key Fields**                                                     | **Description**               |
+| ----------- | ------------------------------------------------------------------ | ----------------------------- |
+| User        | id, email, displayName, role, createdAt                            | Account information           |
+| Project     | id, title, sourceLang, targetLang, status, ownerId                 | Translation project container |
+| Chapter     | id, number, title, projectId, pageCount                            | Organizational unit           |
+| Page        | id, number, chapterId, imageUrl, width, height, ocrStatus          | Manga page                    |
+| TextElement | id, pageId, originalText, translatedText, bbox, fontConfig, status | Detected text                 |
+| Glossary    | id, projectId, sourceTerm, targetTerm, notes                       | Terminology (Dango pattern)   |
+| AIProvider  | id, userId, provider, apiKey, settings                             | User AI configuration         |
 
-*Table 13: Core Database Entities*
+_Table 13: Core Database Entities_
 
 ## 4.4 Security & Compliance
 
@@ -398,79 +396,79 @@ The API uses SvelteKit server routes with JSON request/response bodies. All rout
 
 ## 5.1 REST API Endpoints
 
-| **Method** | **Endpoint** | **Description** |
-| --- | --- | --- |
-| POST | /api/v1/auth/signup | Create new user account |
-| POST | /api/v1/auth/signin | Authenticate via email/password |
-| GET | /api/v1/auth/oauth/:provider | OAuth redirect (google, line) |
-| POST | /api/v1/auth/signout | Terminate session |
+| **Method** | **Endpoint**                 | **Description**                 |
+| ---------- | ---------------------------- | ------------------------------- |
+| POST       | /api/v1/auth/signup          | Create new user account         |
+| POST       | /api/v1/auth/signin          | Authenticate via email/password |
+| GET        | /api/v1/auth/oauth/:provider | OAuth redirect (google, line)   |
+| POST       | /api/v1/auth/signout         | Terminate session               |
 
-*Table 14: Authentication API Endpoints*
+_Table 14: Authentication API Endpoints_
 
-| **Method** | **Endpoint** | **Description** |
-| --- | --- | --- |
-| GET | /api/v1/projects | List user projects with pagination |
-| POST | /api/v1/projects | Create new project |
-| GET | /api/v1/projects/:id | Get project details with chapters |
-| PUT | /api/v1/projects/:id | Update project metadata |
-| DELETE | /api/v1/projects/:id | Delete project and data |
+| **Method** | **Endpoint**         | **Description**                    |
+| ---------- | -------------------- | ---------------------------------- |
+| GET        | /api/v1/projects     | List user projects with pagination |
+| POST       | /api/v1/projects     | Create new project                 |
+| GET        | /api/v1/projects/:id | Get project details with chapters  |
+| PUT        | /api/v1/projects/:id | Update project metadata            |
+| DELETE     | /api/v1/projects/:id | Delete project and data            |
 
-*Table 15: Project Management API Endpoints*
+_Table 15: Project Management API Endpoints_
 
-| **Method** | **Endpoint** | **Description** |
-| --- | --- | --- |
-| POST | /api/v1/chapters/:id/pages/upload | Upload pages (ZIP support) |
-| POST | /api/v1/pages/:id/ocr | Trigger OCR (async, engine selectable) |
-| POST | /api/v1/pages/:id/translate | Trigger translation (async, provider selectable) |
-| POST | /api/v1/pages/:id/inpaint | Trigger inpainting (async, method selectable) |
-| GET | /api/v1/pages/:id/elements | Get all text elements |
-| PUT | /api/v1/elements/:id | Update text element |
-| PUT | /api/v1/elements/batch | Batch update elements |
-| GET | /api/v1/pages/:id/export | Export page as image |
+| **Method** | **Endpoint**                      | **Description**                                  |
+| ---------- | --------------------------------- | ------------------------------------------------ |
+| POST       | /api/v1/chapters/:id/pages/upload | Upload pages (ZIP support)                       |
+| POST       | /api/v1/pages/:id/ocr             | Trigger OCR (async, engine selectable)           |
+| POST       | /api/v1/pages/:id/translate       | Trigger translation (async, provider selectable) |
+| POST       | /api/v1/pages/:id/inpaint         | Trigger inpainting (async, method selectable)    |
+| GET        | /api/v1/pages/:id/elements        | Get all text elements                            |
+| PUT        | /api/v1/elements/:id              | Update text element                              |
+| PUT        | /api/v1/elements/batch            | Batch update elements                            |
+| GET        | /api/v1/pages/:id/export          | Export page as image                             |
 
-*Table 16: Page & Text Element API Endpoints*
+_Table 16: Page & Text Element API Endpoints_
 
 ## 5.2 Third-Party Integrations
 
-| **Service** | **Provider** | **Purpose** |
-| --- | --- | --- |
-| Authentication | Stack Auth | User auth & sessions |
-| File Storage | Uploadcare | Image upload & CDN |
-| Database | PostgreSQL + Drizzle | Data persistence |
-| AI Gateway | OpenRouter | LLM API access |
-| OCR | PaddleOCR / manga-ocr | Text detection |
-| Inpainting | LaMa / OpenCV.js | Text removal |
+| **Service**    | **Provider**          | **Purpose**          |
+| -------------- | --------------------- | -------------------- |
+| Authentication | Stack Auth            | User auth & sessions |
+| File Storage   | Uploadcare            | Image upload & CDN   |
+| Database       | PostgreSQL + Drizzle  | Data persistence     |
+| AI Gateway     | OpenRouter            | LLM API access       |
+| OCR            | PaddleOCR / manga-ocr | Text detection       |
+| Inpainting     | LaMa / OpenCV.js      | Text removal         |
 
-*Table 17: Third-Party Service Integrations*
+_Table 17: Third-Party Service Integrations_
 
 # 6. Technical Risks & Mitigation
 
-| **Risk** | **Impact** | **Mitigation** |
-| --- | --- | --- |
+| **Risk**                     | **Impact**     | **Mitigation**                                              |
+| ---------------------------- | -------------- | ----------------------------------------------------------- |
 | OCR accuracy for manga fonts | Poor detection | Multiple OCR options (manga-ocr pattern); manual correction |
-| AI API costs scaling | Budget overrun | Free tier models; self-hosted Ollama; usage quotas |
-| Image processing latency | Poor UX | Async processing with progress indicators (Dango pattern) |
-| Canvas editor compatibility | Browser issues | Feature detection; progressive enhancement |
-| Copyright liability | Legal exposure | ToS clarity; user responsibility; DMCA process |
+| AI API costs scaling         | Budget overrun | Free tier models; self-hosted Ollama; usage quotas          |
+| Image processing latency     | Poor UX        | Async processing with progress indicators (Dango pattern)   |
+| Canvas editor compatibility  | Browser issues | Feature detection; progressive enhancement                  |
+| Copyright liability          | Legal exposure | ToS clarity; user responsibility; DMCA process              |
 
-*Table 18: Technical Risks and Mitigation*
+_Table 18: Technical Risks and Mitigation_
 
 # 7. Development Setup
 
 ## 7.1 Available Scripts
 
-| **Script** | **Command** | **Purpose** |
-| --- | --- | --- |
-| Development | npm run dev | Start Vite development server |
-| Build | npm run build | Create production build |
-| Type Check | npm run check | Run svelte-check for TypeScript |
-| Lint | npm run lint | Run ESLint and Prettier |
-| Test | npm run test | Run Vitest unit tests |
-| DB Push | npm run db:push | Push schema changes to database |
-| DB Migrate | npm run db:migrate | Run Drizzle migrations |
-| DB Studio | npm run db:studio | Open Drizzle Studio |
+| **Script**  | **Command**        | **Purpose**                     |
+| ----------- | ------------------ | ------------------------------- |
+| Development | npm run dev        | Start Vite development server   |
+| Build       | npm run build      | Create production build         |
+| Type Check  | npm run check      | Run svelte-check for TypeScript |
+| Lint        | npm run lint       | Run ESLint and Prettier         |
+| Test        | npm run test       | Run Vitest unit tests           |
+| DB Push     | npm run db:push    | Push schema changes to database |
+| DB Migrate  | npm run db:migrate | Run Drizzle migrations          |
+| DB Studio   | npm run db:studio  | Open Drizzle Studio             |
 
-*Table 19: Available NPM Scripts*
+_Table 19: Available NPM Scripts_
 
 # 8. References
 
@@ -502,6 +500,6 @@ The API uses SvelteKit server routes with JSON request/response bodies. All rout
 
 [12] LaMa Inpainting - https://github.com/advimman/lama
 
-*Document prepared by Nexus - Systems Analyst & Project Manager*
+_Document prepared by Nexus - Systems Analyst & Project Manager_
 
-*Version 5.0 | February 17, 2026*
+_Version 5.0 | February 17, 2026_
