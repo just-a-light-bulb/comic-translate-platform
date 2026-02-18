@@ -1,0 +1,120 @@
+<script lang="ts">
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { Avatar, AvatarFallback } from '$lib/components/ui/avatar';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import UserIcon from '@lucide/svelte/icons/user';
+	import LogOutIcon from '@lucide/svelte/icons/log-out';
+	import MenuIcon from '@lucide/svelte/icons/menu';
+	import XIcon from '@lucide/svelte/icons/x';
+	import LanguagesIcon from '@lucide/svelte/icons/languages';
+
+	let { user }: { user: { id: string; email: string; displayName: string | null } | null } =
+		$props();
+
+	let mobileMenuOpen = $state(false);
+
+	async function handleSignOut() {
+		await fetch('/api/auth/sign-out', { method: 'POST' });
+		window.location.href = '/';
+	}
+</script>
+
+<header class="sticky top-0 z-50 border-b-3 border-ink bg-paper/95 backdrop-blur-sm">
+	<div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+		<a href="/" class="flex items-center gap-2">
+			<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-ink">
+				<LanguagesIcon class="h-6 w-6 text-paper" />
+			</div>
+			<span class="font-display text-xl tracking-tight">ComicTranslate</span>
+		</a>
+
+		<nav class="hidden items-center gap-8 md:flex">
+			<a
+				href="#features"
+				class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+			>
+				Features
+			</a>
+			<a
+				href="#how-it-works"
+				class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+			>
+				How it Works
+			</a>
+			<a
+				href="#pricing"
+				class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+			>
+				Pricing
+			</a>
+		</nav>
+
+		<div class="hidden items-center gap-4 md:flex">
+			{#if user}
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						<Button variant="ghost" class="gap-2">
+							<Avatar class="h-8 w-8">
+								<AvatarFallback class="bg-ink font-display text-sm text-paper">
+									{user.displayName?.[0] || user.email[0].toUpperCase()}
+								</AvatarFallback>
+							</Avatar>
+							<span class="font-body">{user.displayName || 'User'}</span>
+						</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content align="end">
+						<DropdownMenu.Item>
+							<UserIcon class="mr-2 h-4 w-4" />
+							Profile
+						</DropdownMenu.Item>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item onclick={handleSignOut}>
+							<LogOutIcon class="mr-2 h-4 w-4" />
+							Sign Out
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+			{:else}
+				<Button variant="ghost" href="/sign-in">Sign In</Button>
+				<Button
+					href="/sign-up"
+					class="manga-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+				>
+					Get Started
+				</Button>
+			{/if}
+		</div>
+
+		<button
+			class="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-ink md:hidden"
+			onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
+			aria-label="Toggle menu"
+		>
+			{#if mobileMenuOpen}
+				<XIcon class="h-5 w-5" />
+			{:else}
+				<MenuIcon class="h-5 w-5" />
+			{/if}
+		</button>
+	</div>
+
+	{#if mobileMenuOpen}
+		<div class="border-t-2 border-ink bg-paper p-4 md:hidden">
+			<nav class="flex flex-col gap-4">
+				<a href="#features" class="font-body font-medium">Features</a>
+				<a href="#how-it-works" class="font-body font-medium">How it Works</a>
+				<a href="#pricing" class="font-body font-medium">Pricing</a>
+				<hr class="border-ink" />
+				{#if user}
+					<Button onclick={handleSignOut} variant="outline" class="w-full">Sign Out</Button>
+				{:else}
+					<div class="flex flex-col gap-2">
+						<Button href="/sign-in" variant="outline" class="w-full">Sign In</Button>
+						<Button href="/sign-up" class="w-full">Get Started</Button>
+					</div>
+				{/if}
+			</nav>
+		</div>
+	{/if}
+</header>

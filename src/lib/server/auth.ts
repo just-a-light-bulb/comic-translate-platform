@@ -1,3 +1,5 @@
+import { dev } from '$app/environment';
+import { env } from '$env/dynamic/private';
 import type { Cookies } from '@sveltejs/kit';
 import type { AuthUser, AuthSession } from './stack';
 
@@ -8,9 +10,20 @@ const OAUTH_STATE_COOKIE = 'stack_oauth_state';
 const COOKIE_OPTIONS = {
 	path: '/',
 	httpOnly: true,
-	secure: true,
-	sameSite: 'strict' as const
+	secure: !dev,
+	sameSite: 'lax' as const
 };
+
+export function getAppOrigin(): string {
+	const origin = env.ORIGIN;
+	if (!origin) {
+		if (dev) {
+			return 'http://localhost:5173';
+		}
+		throw new Error('ORIGIN environment variable is required in production');
+	}
+	return origin;
+}
 
 export function setSessionCookies(cookies: Cookies, session: AuthSession): void {
 	const accessTokenMaxAge = 60 * 60 * 24 * 7;

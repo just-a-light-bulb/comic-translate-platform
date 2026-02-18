@@ -1,10 +1,16 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { stack } from '$lib/server/stack';
+import { setSessionCookies, getAppOrigin } from '$lib/server/auth';
 import { signUpSchema } from '$lib/schemas/auth';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	try {
-		const body = await request.json();
+		let body: Record<string, unknown>;
+		try {
+			body = await request.json();
+		} catch {
+			return json({ error: 'Invalid JSON in request body' }, { status: 400 });
+		}
 
 		const parseResult = signUpSchema.safeParse(body);
 
@@ -20,9 +26,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
 		const { email, password } = parseResult.data;
 
-		const protocol = request.headers.get('x-forwarded-proto') || 'https';
-		const host = request.headers.get('host') || 'localhost:5173';
-		const verificationCallbackUrl = `${protocol}://${host}/auth/verify-email`;
+		const origin = getAppOrigin();
+		const verificationCallbackUrl = `${origin}/auth/verify-email`;
 
 		const result = await stack.signUp(email, password, verificationCallbackUrl);
 
@@ -30,21 +35,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			return json({ error: result.error?.message || 'Sign up failed' }, { status: 400 });
 		}
 
-		cookies.set('stack_access_token', result.data.session.accessToken, {
-			path: '/',
-			httpOnly: true,
-			secure: true,
-			sameSite: 'strict',
-			maxAge: 60 * 60 * 24 * 7
-		});
-
-		cookies.set('stack_refresh_token', result.data.session.refreshToken, {
-			path: '/',
-			httpOnly: true,
-			secure: true,
-			sameSite: 'strict',
-			maxAge: 60 * 60 * 24 * 30
-		});
+		setSessionCookies(cookies, result.data.session);
 
 		return json({ user: result.data.user });
 	} catch (error) {

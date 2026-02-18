@@ -5,7 +5,12 @@ import { signInSchema } from '$lib/schemas/auth';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	try {
-		const body = await request.json();
+		let body: Record<string, unknown>;
+		try {
+			body = await request.json();
+		} catch {
+			return json({ error: 'Invalid JSON in request body' }, { status: 400 });
+		}
 
 		const parseResult = signInSchema.safeParse(body);
 

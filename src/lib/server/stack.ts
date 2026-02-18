@@ -16,6 +16,7 @@ export interface AuthSession {
 }
 
 const API_BASE = 'https://api.stack-auth.com/api/v1';
+const DEFAULT_TOKEN_EXPIRY_SECONDS = 3600;
 
 interface StackConfig {
 	projectId: string;
@@ -75,18 +76,27 @@ async function clientFetch<T>(
 			body: body ? JSON.stringify(body) : undefined
 		});
 
-		const data = await response.json();
-
-		if (!response.ok) {
+		let data: Record<string, unknown>;
+		try {
+			data = await response.json();
+		} catch {
 			return {
 				error: {
-					message: data.message || data.error || 'An error occurred',
-					code: data.code
+					message: `HTTP ${response.status}: ${response.statusText}`
 				}
 			};
 		}
 
-		return { data };
+		if (!response.ok) {
+			return {
+				error: {
+					message: (data.message as string) || (data.error as string) || 'An error occurred',
+					code: data.code as string | undefined
+				}
+			};
+		}
+
+		return { data: data as T };
 	} catch (error) {
 		return {
 			error: {
@@ -125,18 +135,27 @@ async function serverFetch<T>(
 			body: body ? JSON.stringify(body) : undefined
 		});
 
-		const data = await response.json();
-
-		if (!response.ok) {
+		let data: Record<string, unknown>;
+		try {
+			data = await response.json();
+		} catch {
 			return {
 				error: {
-					message: data.message || data.error || 'An error occurred',
-					code: data.code
+					message: `HTTP ${response.status}: ${response.statusText}`
 				}
 			};
 		}
 
-		return { data };
+		if (!response.ok) {
+			return {
+				error: {
+					message: (data.message as string) || (data.error as string) || 'An error occurred',
+					code: data.code as string | undefined
+				}
+			};
+		}
+
+		return { data: data as T };
 	} catch (error) {
 		return {
 			error: {
@@ -146,15 +165,10 @@ async function serverFetch<T>(
 	}
 }
 
-interface SignUpResponse {
+interface TokenResponse {
 	access_token: string;
 	refresh_token: string;
-	user_id: string;
-}
-
-interface SignInResponse {
-	access_token: string;
-	refresh_token: string;
+	expires_in?: number;
 	user_id: string;
 }
 
@@ -181,13 +195,18 @@ function mapUser(user: UserResponse): AuthUser {
 	};
 }
 
+function calculateExpiresAt(expiresIn?: number): number {
+	const seconds = expiresIn || DEFAULT_TOKEN_EXPIRY_SECONDS;
+	return Date.now() + seconds * 1000;
+}
+
 export const stack = {
 	async signUp(
 		email: string,
 		password: string,
 		verificationCallbackUrl: string
 	): Promise<StackResponse<{ session: AuthSession; user: AuthUser }>> {
-		const result = await clientFetch<SignUpResponse>('/auth/password/sign-up', {
+		const result = await clientFetch<TokenResponse>('/auth/password/sign-up', {
 			method: 'POST',
 			body: {
 				email,
@@ -211,7 +230,7 @@ export const stack = {
 				session: {
 					accessToken: result.data.access_token,
 					refreshToken: result.data.refresh_token,
-					expiresAt: Date.now() + 3600 * 1000
+					expiresAt: calculateExpiresAt(result.data.expires_in)
 				},
 				user: userResult.data
 			}
@@ -222,7 +241,7 @@ export const stack = {
 		email: string,
 		password: string
 	): Promise<StackResponse<{ session: AuthSession; user: AuthUser }>> {
-		const result = await clientFetch<SignInResponse>('/auth/password/sign-in', {
+		const result = await clientFetch<TokenResponse>('/auth/password/sign-in', {
 			method: 'POST',
 			body: {
 				email,
@@ -245,7 +264,7 @@ export const stack = {
 				session: {
 					accessToken: result.data.access_token,
 					refreshToken: result.data.refresh_token,
-					expiresAt: Date.now() + 3600 * 1000
+					expiresAt: calculateExpiresAt(result.data.expires_in)
 				},
 				user: userResult.data
 			}
@@ -293,85 +312,119 @@ export const stack = {
 	): Promise<StackResponse<{ session: AuthSession; user: AuthUser }>> {
 		const config = getConfig();
 
-		const response = await fetch(`${API_BASE}/oauth/token`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-Stack-Access-Type': 'client',
-				'X-Stack-Project-Id': config.projectId,
-				'X-Stack-Publishable-Client-Key': config.publishableClientKey
-			},
-			body: JSON.stringify({
-				code,
-				redirect_uri: redirectUri,
-				grant_type: 'authorization_code'
-			})
-		});
+		try {
+			const response = await fetch(`${API_BASE}/oauth/token`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Stack-Access-Type': 'client',
+					'X-Stack-Project-Id': config.projectId,
+					'X-Stack-Publishable-Client-Key': config.publishableClientKey
+				},
+				body: JSON.stringify({
+					code,
+					redirect_uri: redirectUri,
+					grant_type: 'authorization_code'
+				})
+			});
 
-		const data = await response.json();
+			let data: Record<string, unknown>;
+			try {
+				data = await response.json();
+			} catch {
+				return {
+					error: {
+						message: `HTTP ${response.status}: ${response.statusText}`
+					}
+				};
+			}
 
-		if (!response.ok) {
+			if (!response.ok) {
+				return {
+					error: {
+						message: (data.message as string) || (data.error as string) || 'OAuth exchange failed',
+						code: data.code as string | undefined
+					}
+				};
+			}
+
+			const userResult = await this.getUser(data.access_token as string);
+
+			if (userResult.error || !userResult.data) {
+				return { error: userResult.error };
+			}
+
+			return {
+				data: {
+					session: {
+						accessToken: data.access_token as string,
+						refreshToken: data.refresh_token as string,
+						expiresAt: calculateExpiresAt(data.expires_in as number | undefined)
+					},
+					user: userResult.data
+				}
+			};
+		} catch (error) {
 			return {
 				error: {
-					message: data.message || data.error || 'OAuth exchange failed',
-					code: data.code
+					message: error instanceof Error ? error.message : 'Network error during OAuth exchange'
 				}
 			};
 		}
-
-		const userResult = await this.getUser(data.access_token);
-
-		if (userResult.error || !userResult.data) {
-			return { error: userResult.error };
-		}
-
-		return {
-			data: {
-				session: {
-					accessToken: data.access_token,
-					refreshToken: data.refresh_token,
-					expiresAt: Date.now() + 3600 * 1000
-				},
-				user: userResult.data
-			}
-		};
 	},
 
 	async refreshToken(refreshToken: string): Promise<StackResponse<AuthSession>> {
 		const config = getConfig();
 
-		const response = await fetch(`${API_BASE}/auth/refresh`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-Stack-Access-Type': 'client',
-				'X-Stack-Project-Id': config.projectId,
-				'X-Stack-Publishable-Client-Key': config.publishableClientKey
-			},
-			body: JSON.stringify({
-				refresh_token: refreshToken,
-				grant_type: 'refresh_token'
-			})
-		});
+		try {
+			const response = await fetch(`${API_BASE}/auth/refresh`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Stack-Access-Type': 'client',
+					'X-Stack-Project-Id': config.projectId,
+					'X-Stack-Publishable-Client-Key': config.publishableClientKey
+				},
+				body: JSON.stringify({
+					refresh_token: refreshToken,
+					grant_type: 'refresh_token'
+				})
+			});
 
-		const data = await response.json();
+			let data: Record<string, unknown>;
+			try {
+				data = await response.json();
+			} catch {
+				return {
+					error: {
+						message: `HTTP ${response.status}: ${response.statusText}`
+					}
+				};
+			}
 
-		if (!response.ok) {
+			if (!response.ok) {
+				return {
+					error: {
+						message: (data.message as string) || (data.error as string) || 'Token refresh failed',
+						code: data.code as string | undefined
+					}
+				};
+			}
+
+			return {
+				data: {
+					accessToken: data.access_token as string,
+					refreshToken: (data.refresh_token as string) || refreshToken,
+					expiresAt: calculateExpiresAt(data.expires_in as number | undefined)
+				}
+			};
+		} catch (error) {
 			return {
 				error: {
-					message: data.message || data.error || 'Token refresh failed',
-					code: data.code
+					message: error instanceof Error ? error.message : 'Network error during token refresh'
 				}
 			};
 		}
-
-		return {
-			data: {
-				accessToken: data.access_token,
-				refreshToken: data.refresh_token || refreshToken,
-				expiresAt: Date.now() + 3600 * 1000
-			}
-		};
 	}
 };
 
