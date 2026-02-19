@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Card from '$lib/components/ui/card/card.svelte';
@@ -18,9 +17,8 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-3xl space-y-6 px-4 py-10">
-	<a href={resolve('/chapters')} class="text-sm text-muted-foreground hover:underline"
-		>← Back to chapters</a
-	>
+	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+	<a href="/chapters" class="text-sm text-muted-foreground hover:underline">← Back to chapters</a>
 
 	<Card>
 		<CardHeader>

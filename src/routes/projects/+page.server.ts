@@ -1,19 +1,74 @@
 import { fail } from '@sveltejs/kit';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, ilike, or, sql, asc } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { chapter, project } from '$lib/server/db/schema';
 import { requireUser } from '$lib/server/auth';
 import type { Actions, PageServerLoad } from './$types';
 
+const ITEMS_PER_PAGE = 10;
+const VALID_SORT_FIELDS = ['name', 'createdAt'] as const;
+const VALID_SORT_DIRECTIONS = ['asc', 'desc'] as const;
+
+type SortField = (typeof VALID_SORT_FIELDS)[number];
+type SortDirection = (typeof VALID_SORT_DIRECTIONS)[number];
+
+function parseSearchParams(url: URL) {
+	const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
+	const search = url.searchParams.get('search')?.trim() || '';
+	const sortField = url.searchParams.get('sort') as SortField | null;
+	const sortDirection = url.searchParams.get('dir') as SortDirection | null;
+
+	return {
+		page,
+		search,
+		sort: VALID_SORT_FIELDS.includes(sortField as SortField)
+			? (sortField as SortField)
+			: 'createdAt',
+		dir: VALID_SORT_DIRECTIONS.includes(sortDirection as SortDirection)
+			? (sortDirection as SortDirection)
+			: 'desc'
+	};
+}
+
 export const load: PageServerLoad = async (event) => {
 	const user = await requireUser(event);
-	const projects = await db
-		.select()
-		.from(project)
-		.where(eq(project.userId, user.id))
-		.orderBy(desc(project.createdAt));
+	const { page, search, sort, dir } = parseSearchParams(event.url);
 
-	return { projects };
+	const whereClause = search
+		? and(
+				eq(project.userId, user.id),
+				or(ilike(project.name, `%${search}%`), ilike(project.description, `%${search}%`))
+			)
+		: eq(project.userId, user.id);
+
+	const [projects, [{ count } = { count: 0 }]] = await Promise.all([
+		db
+			.select()
+			.from(project)
+			.where(whereClause)
+			.orderBy(dir === 'asc' ? asc(project[sort]) : desc(project[sort]))
+			.limit(ITEMS_PER_PAGE)
+			.offset((page - 1) * ITEMS_PER_PAGE),
+		db
+			.select({ count: sql<number>`count(*)::int` })
+			.from(project)
+			.where(whereClause)
+	]);
+
+	const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
+
+	return {
+		projects,
+		pagination: {
+			page,
+			totalPages,
+			totalItems: Number(count),
+			itemsPerPage: ITEMS_PER_PAGE
+		},
+		search,
+		sort,
+		dir
+	};
 };
 
 export const actions: Actions = {

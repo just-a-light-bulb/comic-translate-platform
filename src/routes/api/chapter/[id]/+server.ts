@@ -4,7 +4,10 @@ import { db } from '$lib/server/db';
 import { chapter, project } from '$lib/server/db/schema';
 import { requireUser } from '$lib/server/auth';
 
-const parseChapterId = (value: string) => {
+const parseChapterId = (value: string | undefined) => {
+	if (!value) {
+		throw error(400, 'Chapter id is required.');
+	}
 	const id = Number(value);
 	if (Number.isNaN(id)) {
 		throw error(400, 'Invalid chapter id.');

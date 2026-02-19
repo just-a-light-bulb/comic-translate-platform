@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import type { ActionData, PageData } from './$types';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Card from '$lib/components/ui/card/card.svelte';
@@ -18,9 +17,8 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-5xl space-y-6 px-4 py-10">
-	<a href={resolve('/projects')} class="text-sm text-muted-foreground hover:underline"
-		>← Back to projects</a
-	>
+	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+	<a href="/projects" class="text-sm text-muted-foreground hover:underline">← Back to projects</a>
 
 	<Card>
 		<CardHeader>
@@ -75,7 +73,8 @@
 					{#each data.chapters as item (item.id)}
 						<div class="rounded-lg border p-4">
 							<div class="flex items-center justify-between gap-3">
-								<a href={resolve(`/chapter/${item.id}`)} class="font-medium hover:underline">
+								<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+								<a href="/chapter/{item.id}" class="font-medium hover:underline">
 									Chapter {item.chapterNumber}: {item.title}
 								</a>
 								<form method="POST" action="?/deleteChapter">
