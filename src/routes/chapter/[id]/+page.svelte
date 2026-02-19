@@ -140,8 +140,11 @@
 	<!-- Header -->
 	<header class="flex shrink-0 items-center justify-between border-b bg-white px-4 py-2">
 		<div class="flex items-center gap-4">
-			<a href={resolve('/chapters')} class="text-sm text-muted-foreground hover:underline">
-				← Chapters
+			<a
+				href={resolve(`/project/${data.chapter.projectId}`)}
+				class="text-sm text-muted-foreground hover:underline"
+			>
+				← Back to Project
 			</a>
 			<h1 class="text-lg font-semibold">
 				Chapter {data.chapter.chapterNumber}: {data.chapter.title}

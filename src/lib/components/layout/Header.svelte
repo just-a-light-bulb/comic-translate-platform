@@ -11,7 +11,6 @@
 	import XIcon from '@lucide/svelte/icons/x';
 	import LanguagesIcon from '@lucide/svelte/icons/languages';
 	import FolderKanbanIcon from '@lucide/svelte/icons/folder-kanban';
-	import BookOpenTextIcon from '@lucide/svelte/icons/book-open-text';
 	import type { UserType } from '@kinde-oss/kinde-typescript-sdk';
 
 	let mobileMenuOpen = $state(false);
@@ -56,12 +55,6 @@
 					class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
 				>
 					Projects
-				</a>
-				<a
-					href="/chapters"
-					class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-				>
-					Chapters
 				</a>
 			{:else}
 				<a
@@ -115,13 +108,6 @@
 								Projects
 							</a>
 						</DropdownMenu.Item>
-						<DropdownMenu.Item>
-							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-							<a href="/chapters" class="flex items-center">
-								<BookOpenTextIcon class="mr-2 h-4 w-4" />
-								Chapters
-							</a>
-						</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
 							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
@@ -172,10 +158,6 @@
 					<Button href="/projects" onclick={closeMobileMenu} variant="outline" class="w-full">
 						<FolderKanbanIcon class="mr-2 h-4 w-4" />
 						Projects
-					</Button>
-					<Button href="/chapters" onclick={closeMobileMenu} variant="outline" class="w-full">
-						<BookOpenTextIcon class="mr-2 h-4 w-4" />
-						Chapters
 					</Button>
 					<hr class="border-ink" />
 					<Button

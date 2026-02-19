@@ -83,7 +83,16 @@ export const actions: Actions = {
 		const user = await requireUser(event);
 		const chapterId = parseChapterId(event.params.id);
 
+		const existingChapter = await db.query.chapter.findFirst({
+			where: and(eq(chapter.id, chapterId), eq(chapter.userId, user.id))
+		});
+
+		if (!existingChapter) {
+			throw error(404, 'Chapter not found.');
+		}
+
+		const projectId = existingChapter.projectId;
 		await db.delete(chapter).where(and(eq(chapter.id, chapterId), eq(chapter.userId, user.id)));
-		throw redirect(303, '/chapters');
+		throw redirect(303, `/project/${projectId}`);
 	}
 };
