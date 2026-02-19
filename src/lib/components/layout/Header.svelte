@@ -3,7 +3,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Avatar, AvatarFallback } from '$lib/components/ui/avatar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import UserIcon from '@lucide/svelte/icons/user';
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import LayoutDashboardIcon from '@lucide/svelte/icons/layout-dashboard';
 	import SettingsIcon from '@lucide/svelte/icons/settings';
@@ -125,7 +124,7 @@
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
 							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-							<a href="/dashboard#account" class="flex items-center">
+							<a href="/settings" class="flex items-center">
 								<SettingsIcon class="mr-2 h-4 w-4" />
 								Settings
 							</a>
@@ -178,13 +177,8 @@
 						Chapters
 					</Button>
 					<hr class="border-ink" />
-					<Button
-						href="/dashboard#account"
-						onclick={closeMobileMenu}
-						variant="outline"
-						class="w-full"
-					>
-						<UserIcon class="mr-2 h-4 w-4" />
+					<Button href="/settings" onclick={closeMobileMenu} variant="outline" class="w-full">
+						<SettingsIcon class="mr-2 h-4 w-4" />
 						Settings
 					</Button>
 					<Button onclick={handleSignOut} variant="destructive" class="w-full">Sign Out</Button>
