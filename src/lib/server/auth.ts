@@ -1,6 +1,5 @@
-import { redirect } from '@sveltejs/kit';
 import { kindeAuthClient, type SessionManager } from '@kinde-oss/kinde-auth-sveltekit';
-import type { LayoutServerLoad } from './$types';
+import { error, type RequestEvent } from '@sveltejs/kit';
 
 type KindeSessionRequest = Request & {
 	getSessionItem?: (itemKey: string) => Promise<unknown> | unknown;
@@ -9,7 +8,7 @@ type KindeSessionRequest = Request & {
 	destroySession?: () => Promise<void>;
 };
 
-export const load: LayoutServerLoad = async (event) => {
+export const requireUser = async (event: RequestEvent) => {
 	const kindeRequest = event.request as KindeSessionRequest;
 	if (event.locals.getSessionItem) {
 		kindeRequest.getSessionItem = event.locals.getSessionItem;
@@ -25,8 +24,10 @@ export const load: LayoutServerLoad = async (event) => {
 	}
 
 	const user = await kindeAuthClient.getUser(kindeRequest as unknown as SessionManager);
-	if (user) {
-		throw redirect(302, '/dashboard');
+
+	if (!user?.id) {
+		throw error(401, 'Unauthorized');
 	}
-	return {};
+
+	return user;
 };

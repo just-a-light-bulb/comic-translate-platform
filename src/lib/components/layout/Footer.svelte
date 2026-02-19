@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import LanguagesIcon from '@lucide/svelte/icons/languages';
 	import GithubIcon from '@lucide/svelte/icons/github';
 	import TwitterIcon from '@lucide/svelte/icons/twitter';
@@ -40,10 +41,14 @@
 				<h4 class="font-display text-sm tracking-wide uppercase">Product</h4>
 				<ul class="mt-4 space-y-2 font-body text-sm">
 					<li>
-						<a href="/#features" class="text-muted-foreground hover:text-foreground">Features</a>
+						<a href={resolve('/#features')} class="text-muted-foreground hover:text-foreground"
+							>Features</a
+						>
 					</li>
 					<li>
-						<a href="/#pricing" class="text-muted-foreground hover:text-foreground">Pricing</a>
+						<a href={resolve('/#pricing')} class="text-muted-foreground hover:text-foreground"
+							>Pricing</a
+						>
 					</li>
 					<li>
 						<button type="button" class="text-muted-foreground hover:text-foreground"

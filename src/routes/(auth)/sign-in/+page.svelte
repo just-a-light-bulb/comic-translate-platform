@@ -6,7 +6,6 @@
 	import CardTitle from '$lib/components/ui/card/card-title.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import GithubIcon from '@lucide/svelte/icons/github';
-	import { env as publicEnv } from '$env/dynamic/public';
 
 	let { data }: { data: { error?: string } } = $props();
 </script>

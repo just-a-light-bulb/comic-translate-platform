@@ -3,15 +3,23 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { sessionHooks, type EventHandler } from '@kinde-oss/kinde-auth-sveltekit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 
+type KindeSessionRequest = Request & {
+	getSessionItem?: (itemKey: string) => Promise<unknown> | unknown;
+	setSessionItem?: (itemKey: string, itemValue: unknown) => Promise<void>;
+	removeSessionItem?: (itemKey: string) => Promise<void>;
+	destroySession?: () => Promise<void>;
+};
+
 const handleKinde: Handle = async ({ event, resolve }) => {
 	await sessionHooks({ event: event as EventHandler });
 
 	// Store session manager methods on locals since request gets cloned by SvelteKit
 	// for server endpoints
-	event.locals.getSessionItem = (event.request as any).getSessionItem?.bind(event.request);
-	event.locals.setSessionItem = (event.request as any).setSessionItem?.bind(event.request);
-	event.locals.removeSessionItem = (event.request as any).removeSessionItem?.bind(event.request);
-	event.locals.destroySession = (event.request as any).destroySession?.bind(event.request);
+	const kindeSessionRequest = event.request as KindeSessionRequest;
+	event.locals.getSessionItem = kindeSessionRequest.getSessionItem?.bind(kindeSessionRequest);
+	event.locals.setSessionItem = kindeSessionRequest.setSessionItem?.bind(kindeSessionRequest);
+	event.locals.removeSessionItem = kindeSessionRequest.removeSessionItem?.bind(kindeSessionRequest);
+	event.locals.destroySession = kindeSessionRequest.destroySession?.bind(kindeSessionRequest);
 
 	const response = await resolve(event);
 	return response;
