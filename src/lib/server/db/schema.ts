@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, serial, integer, text, varchar, timestamp } from 'drizzle-orm/pg-core';
 
 export const task = pgTable('task', {
 	id: serial('id').primaryKey(),
@@ -36,4 +36,14 @@ export const accountProfile = pgTable('account_profile', {
 		.notNull()
 		.defaultNow()
 		.$onUpdate(() => new Date())
+});
+
+export const userSettings = pgTable('user_settings', {
+	id: serial('id').primaryKey(),
+	userId: varchar('user_id', { length: 255 }).notNull().unique(),
+	displayName: varchar('display_name', { length: 255 }),
+	language: varchar('language', { length: 10 }).notNull().default('en'),
+	theme: varchar('theme', { length: 10 }).notNull().default('light'),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
