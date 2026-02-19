@@ -5,9 +5,13 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import UserIcon from '@lucide/svelte/icons/user';
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
+	import LayoutDashboardIcon from '@lucide/svelte/icons/layout-dashboard';
+	import SettingsIcon from '@lucide/svelte/icons/settings';
 	import MenuIcon from '@lucide/svelte/icons/menu';
 	import XIcon from '@lucide/svelte/icons/x';
 	import LanguagesIcon from '@lucide/svelte/icons/languages';
+	import FolderKanbanIcon from '@lucide/svelte/icons/folder-kanban';
+	import BookOpenTextIcon from '@lucide/svelte/icons/book-open-text';
 	import type { UserType } from '@kinde-oss/kinde-typescript-sdk';
 
 	let mobileMenuOpen = $state(false);
@@ -44,29 +48,43 @@
 			<span class="font-display text-xl tracking-tight">ComicTranslate</span>
 		</a>
 
+		<!-- eslint-disable svelte/no-navigation-without-resolve -->
 		<nav class="hidden items-center gap-8 md:flex">
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a
-				href="/#features"
-				class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-			>
-				Features
-			</a>
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a
-				href="/#how-it-works"
-				class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-			>
-				How it Works
-			</a>
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a
-				href="/#pricing"
-				class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-			>
-				Pricing
-			</a>
+			{#if user}
+				<a
+					href="/projects"
+					class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+				>
+					Projects
+				</a>
+				<a
+					href="/chapters"
+					class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+				>
+					Chapters
+				</a>
+			{:else}
+				<a
+					href="/#features"
+					class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+				>
+					Features
+				</a>
+				<a
+					href="/#how-it-works"
+					class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+				>
+					How it Works
+				</a>
+				<a
+					href="/#pricing"
+					class="font-body text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+				>
+					Pricing
+				</a>
+			{/if}
 		</nav>
+		<!-- eslint-enable svelte/no-navigation-without-resolve -->
 
 		<div class="hidden items-center gap-4 md:flex">
 			{#if user}
@@ -84,8 +102,33 @@
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Item>
-							<UserIcon class="mr-2 h-4 w-4" />
-							Profile
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+							<a href="/dashboard" class="flex items-center">
+								<LayoutDashboardIcon class="mr-2 h-4 w-4" />
+								Dashboard
+							</a>
+						</DropdownMenu.Item>
+						<DropdownMenu.Item>
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+							<a href="/projects" class="flex items-center">
+								<FolderKanbanIcon class="mr-2 h-4 w-4" />
+								Projects
+							</a>
+						</DropdownMenu.Item>
+						<DropdownMenu.Item>
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+							<a href="/chapters" class="flex items-center">
+								<BookOpenTextIcon class="mr-2 h-4 w-4" />
+								Chapters
+							</a>
+						</DropdownMenu.Item>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item>
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+							<a href="/dashboard#account" class="flex items-center">
+								<SettingsIcon class="mr-2 h-4 w-4" />
+								Settings
+							</a>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item onclick={handleSignOut}>
@@ -121,18 +164,40 @@
 	{#if mobileMenuOpen}
 		<div class="border-t-2 border-ink bg-paper p-4 md:hidden">
 			<nav class="flex flex-col gap-4">
-				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-				<a href="/#features" class="font-body font-medium" onclick={closeMobileMenu}>Features</a>
-				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-				<a href="/#how-it-works" class="font-body font-medium" onclick={closeMobileMenu}
-					>How it Works</a
-				>
-				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-				<a href="/#pricing" class="font-body font-medium" onclick={closeMobileMenu}>Pricing</a>
-				<hr class="border-ink" />
 				{#if user}
-					<Button onclick={handleSignOut} variant="outline" class="w-full">Sign Out</Button>
+					<Button href="/dashboard" onclick={closeMobileMenu} variant="outline" class="w-full">
+						<LayoutDashboardIcon class="mr-2 h-4 w-4" />
+						Dashboard
+					</Button>
+					<Button href="/projects" onclick={closeMobileMenu} variant="outline" class="w-full">
+						<FolderKanbanIcon class="mr-2 h-4 w-4" />
+						Projects
+					</Button>
+					<Button href="/chapters" onclick={closeMobileMenu} variant="outline" class="w-full">
+						<BookOpenTextIcon class="mr-2 h-4 w-4" />
+						Chapters
+					</Button>
+					<hr class="border-ink" />
+					<Button
+						href="/dashboard#account"
+						onclick={closeMobileMenu}
+						variant="outline"
+						class="w-full"
+					>
+						<UserIcon class="mr-2 h-4 w-4" />
+						Settings
+					</Button>
+					<Button onclick={handleSignOut} variant="destructive" class="w-full">Sign Out</Button>
 				{:else}
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+					<a href="/#features" class="font-body font-medium" onclick={closeMobileMenu}>Features</a>
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+					<a href="/#how-it-works" class="font-body font-medium" onclick={closeMobileMenu}
+						>How it Works</a
+					>
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+					<a href="/#pricing" class="font-body font-medium" onclick={closeMobileMenu}>Pricing</a>
+					<hr class="border-ink" />
 					<div class="flex flex-col gap-2">
 						<Button href="/api/auth/login" variant="outline" class="w-full">Sign In</Button>
 						<Button href="/api/auth/register" class="w-full">Get Started</Button>

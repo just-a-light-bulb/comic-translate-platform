@@ -11,6 +11,7 @@ You can gathering more infomation in `./.docs/*`
 - Use `pnpm dlx shadcn-svelte@latest add <component>` for add new shadcn/svelte UI component
 - Run `pnpm install` to add the package to your workspace so Vite, ESLint, and TypeScript can see it.
 - Always run `pnpm run lint` for check code problem and format of code
+- If `pnpm run lint` fails, you must fix all lint errors before finishing the task
 - Always run `pnpm run build` for ensure application can build pass
 - Check the name field inside each package's package.json to confirm the right name—skip the top-level one.
 - Always use mcp tools & skills relate for do any task
