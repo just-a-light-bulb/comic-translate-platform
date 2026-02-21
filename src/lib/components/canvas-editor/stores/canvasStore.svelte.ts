@@ -1,56 +1,41 @@
-import type { CanvasElement, TextElement, TextProperties } from '../types/elements';
+import type {
+	CanvasElement,
+	TextElement,
+	TextProperties,
+	ShapeElement,
+	ShapeProperties
+} from '../types/elements';
 
 function generateId(): string {
-	return `el_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+	return `el_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
 
 function createCanvasStore() {
 	let elements = $state<CanvasElement[]>([]);
-	let zoom = $state(1);
-	let panX = $state(0);
-	let panY = $state(0);
-	let width = $state(800);
-	let height = $state(600);
 	let backgroundImage = $state<string | null>(null);
+	let stageWidth = $state(800);
+	let stageHeight = $state(600);
 
 	return {
 		get elements() {
 			return elements;
 		},
-		get zoom() {
-			return zoom;
-		},
-		get panX() {
-			return panX;
-		},
-		get panY() {
-			return panY;
-		},
-		get width() {
-			return width;
-		},
-		get height() {
-			return height;
-		},
 		get backgroundImage() {
 			return backgroundImage;
+		},
+		get stageWidth() {
+			return stageWidth;
+		},
+		get stageHeight() {
+			return stageHeight;
 		},
 		get sortedElements() {
 			return [...elements].sort((a, b) => a.zIndex - b.zIndex);
 		},
 
-		setDimensions(w: number, h: number) {
-			width = w;
-			height = h;
-		},
-
-		setZoom(newZoom: number) {
-			zoom = Math.max(0.1, Math.min(5, newZoom));
-		},
-
-		setPan(x: number, y: number) {
-			panX = x;
-			panY = y;
+		setStageDimensions(w: number, h: number) {
+			stageWidth = w;
+			stageHeight = h;
 		},
 
 		setBackgroundImage(src: string | null) {
@@ -70,8 +55,8 @@ function createCanvasStore() {
 		addTextElement(options: {
 			x: number;
 			y: number;
-			width: number;
-			height: number;
+			width?: number;
+			height?: number;
 			content: string;
 			originalContent?: string;
 		}): TextElement {
@@ -80,7 +65,7 @@ function createCanvasStore() {
 				originalContent: options.originalContent || options.content,
 				translatedContent: '',
 				fontFamily: 'Arial',
-				fontSize: 16,
+				fontSize: 20,
 				fontWeight: 'normal',
 				fontStyle: 'normal',
 				textAlign: 'center',
@@ -97,6 +82,40 @@ function createCanvasStore() {
 				type: 'text',
 				x: options.x,
 				y: options.y,
+				width: options.width ?? 200,
+				height: options.height ?? 50,
+				rotation: 0,
+				opacity: 1,
+				visible: true,
+				locked: false,
+				zIndex: elements.length,
+				text: textProps
+			};
+
+			elements = [...elements, newElement];
+			return newElement;
+		},
+
+		addShapeElement(options: {
+			x: number;
+			y: number;
+			width: number;
+			height: number;
+			shapeType: ShapeProperties['shapeType'];
+		}): ShapeElement {
+			const shapeProps: ShapeProperties = {
+				shapeType: options.shapeType,
+				fill: 'transparent',
+				stroke: '#000000',
+				strokeWidth: 2,
+				cornerRadius: 0
+			};
+
+			const newElement: ShapeElement = {
+				id: generateId(),
+				type: 'shape',
+				x: options.x,
+				y: options.y,
 				width: options.width,
 				height: options.height,
 				rotation: 0,
@@ -104,7 +123,7 @@ function createCanvasStore() {
 				visible: true,
 				locked: false,
 				zIndex: elements.length,
-				text: textProps
+				shape: shapeProps
 			};
 
 			elements = [...elements, newElement];
@@ -129,6 +148,18 @@ function createCanvasStore() {
 			});
 		},
 
+		updateShapeElement(id: string, shapeUpdates: Partial<ShapeProperties>) {
+			elements = elements.map((el) => {
+				if (el.id === id && el.type === 'shape') {
+					return {
+						...el,
+						shape: { ...el.shape, ...shapeUpdates }
+					} as ShapeElement;
+				}
+				return el;
+			});
+		},
+
 		deleteElement(id: string) {
 			elements = elements.filter((el) => el.id !== id);
 		},
@@ -137,17 +168,20 @@ function createCanvasStore() {
 			elements = elements.filter((el) => !ids.includes(el.id));
 		},
 
-		reorderElement(id: string, newZIndex: number) {
-			const element = elements.find((el) => el.id === id);
-			if (!element) return;
+		getElement(id: string) {
+			return elements.find((el) => el.id === id);
+		},
 
-			const filtered = elements.filter((el) => el.id !== id);
-			const reordered = [
-				...filtered.slice(0, newZIndex),
-				{ ...element, zIndex: newZIndex },
-				...filtered.slice(newZIndex)
-			];
-			elements = reordered.map((el, idx) => ({ ...el, zIndex: idx }));
+		getElementsByIds(ids: string[]) {
+			return elements.filter((el) => ids.includes(el.id));
+		},
+
+		setElements(newElements: CanvasElement[]) {
+			elements = newElements;
+		},
+
+		clearElements() {
+			elements = [];
 		},
 
 		bringToFront(id: string) {
@@ -167,23 +201,6 @@ function createCanvasStore() {
 			];
 		},
 
-		getElement(id: string) {
-			return elements.find((el) => el.id === id);
-		},
-
-		getElementsByIds(ids: string[]) {
-			return elements.filter((el) => ids.includes(el.id));
-		},
-
-		setElements(newElements: CanvasElement[]) {
-			elements = newElements;
-		},
-
-		clearElements() {
-			elements = [];
-		},
-
-		// For undo/redo support
 		getState(): CanvasElement[] {
 			return JSON.parse(JSON.stringify(elements));
 		},
