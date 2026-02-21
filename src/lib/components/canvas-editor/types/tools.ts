@@ -1,4 +1,4 @@
-export type ToolType = 'select' | 'text' | 'pan' | 'zoom';
+export type ToolType = 'select' | 'text' | 'pan' | 'zoom' | 'shape';
 
 export interface Tool {
 	type: ToolType;
@@ -18,7 +18,8 @@ export const DEFAULT_TOOLS: Record<ToolType, Tool> = {
 	select: { type: 'select', cursor: 'default', shortcut: 'V' },
 	text: { type: 'text', cursor: 'text', shortcut: 'T' },
 	pan: { type: 'pan', cursor: 'grab', shortcut: 'H' },
-	zoom: { type: 'zoom', cursor: 'zoom-in', shortcut: 'Z' }
+	zoom: { type: 'zoom', cursor: 'zoom-in', shortcut: 'Z' },
+	shape: { type: 'shape', cursor: 'crosshair', shortcut: 'S' }
 };
 
 export const DEFAULT_SETTINGS: EditorSettings = {
