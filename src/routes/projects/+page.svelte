@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ActionData, PageData } from './$types';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Card from '$lib/components/ui/card/card.svelte';
 	import CardContent from '$lib/components/ui/card/card-content.svelte';
@@ -22,7 +22,11 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let searchInput = $state(data.search);
+	// eslint-disable-next-line svelte/prefer-writable-derived
+	let searchInput = $state('');
+	$effect(() => {
+		searchInput = data.search ?? '';
+	});
 
 	const formatDate = (value: Date | string) =>
 		new Date(value).toLocaleDateString(undefined, {
@@ -59,11 +63,6 @@
 	function clearSearch() {
 		searchInput = '';
 		window.location.href = buildUrl({ search: undefined, page: 1 });
-	}
-
-	function getSortIcon(field: string) {
-		if (data.sort !== field) return ArrowUpDownIcon;
-		return data.dir === 'asc' ? ArrowUpIcon : ArrowDownIcon;
 	}
 </script>
 
@@ -153,7 +152,7 @@
 					<CardContent class="p-4">
 						<div class="flex items-center justify-between gap-3">
 							<div class="flex-1">
-								<a href="{base}/project/{item.id}" class="block">
+								<a href={resolve(`/project/${item.id}`)} class="block">
 									<h3 class="font-display text-lg hover:text-manga-accent">{item.name}</h3>
 								</a>
 								<p class="mt-1 line-clamp-1 text-sm text-muted-foreground">
@@ -173,7 +172,13 @@
 									class="rounded p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
 									title="Sort by name"
 								>
-									<svelte:component this={getSortIcon('name')} class="h-4 w-4" />
+									{#if data.sort !== 'name'}
+										<ArrowUpDownIcon class="h-4 w-4" />
+									{:else if data.dir === 'asc'}
+										<ArrowUpIcon class="h-4 w-4" />
+									{:else}
+										<ArrowDownIcon class="h-4 w-4" />
+									{/if}
 								</button>
 								<form method="POST" action="?/delete">
 									<input type="hidden" name="id" value={item.id} />

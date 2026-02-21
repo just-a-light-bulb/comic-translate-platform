@@ -11,9 +11,15 @@ importers:
       '@kinde-oss/kinde-auth-sveltekit':
         specifier: ^2.2.3
         version: 2.2.3(@sveltejs/kit@2.52.0(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.51.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)))(svelte@5.51.3)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)))(eslint@9.39.2(jiti@2.6.1))(svelte@5.51.3)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))(vitest@4.0.18)
+      konva:
+        specifier: ^10.2.0
+        version: 10.2.0
       postgres:
         specifier: ^3.4.8
         version: 3.4.8
+      svelte-konva:
+        specifier: ^1.0.1
+        version: 1.0.1(konva@10.2.0)(svelte@5.51.3)
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -81,6 +87,9 @@ importers:
       globals:
         specifier: ^17.3.0
         version: 17.3.0
+      paneforge:
+        specifier: ^1.0.2
+        version: 1.0.2(svelte@5.51.3)
       playwright:
         specifier: ^1.58.1
         version: 1.58.2
@@ -1757,6 +1766,9 @@ packages:
   known-css-properties@0.37.0:
     resolution: {integrity: sha512-JCDrsP4Z1Sb9JwG0aJ8Eo2r7k4Ou5MwmThS/6lcIe1ICyb7UBJKGRIUUdqc2ASdE/42lgz6zFUnzAIhtXnBVrQ==}
 
+  konva@10.2.0:
+    resolution: {integrity: sha512-JBoz0Xjbf49UPxCZegZ4WseqOzJ+C4AUDOtJ9eBve5RS5Fcq/u8TdBD5fDl/uPFInpC3a9uycm0sRyZpF4hheg==}
+
   kysely@0.27.6:
     resolution: {integrity: sha512-FIyV/64EkKhJmjgC0g2hygpBv5RNWVPyNCqSAD7eTCv6eFWNIi4PN1UvdSJGicN/o35bnevgis4Y0UDC0qi8jQ==}
     engines: {node: '>=14.0.0'}
@@ -1900,6 +1912,11 @@ packages:
   p-locate@5.0.0:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
+
+  paneforge@1.0.2:
+    resolution: {integrity: sha512-KzmIXQH1wCfwZ4RsMohD/IUtEjVhteR+c+ulb/CHYJHX8SuDXoJmChtsc/Xs5Wl8NHS4L5Q7cxL8MG40gSU1bA==}
+    peerDependencies:
+      svelte: ^5.29.0
 
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
@@ -2086,6 +2103,16 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
+  runed@0.23.4:
+    resolution: {integrity: sha512-9q8oUiBYeXIDLWNK5DfCWlkL0EW3oGbk845VdKlPeia28l751VpfesaB/+7pI6rnbx1I6rqoZ2fZxptOJLxILA==}
+    peerDependencies:
+      svelte: ^5.7.0
+
+  runed@0.29.2:
+    resolution: {integrity: sha512-0cq6cA6sYGZwl/FvVqjx9YN+1xEBu9sDDyuWdDW1yWX7JF2wmvmVKfH+hVCZs+csW+P3ARH92MjI3H9QTagOQA==}
+    peerDependencies:
+      svelte: ^5.7.0
+
   runed@0.35.1:
     resolution: {integrity: sha512-2F4Q/FZzbeJTFdIS/PuOoPRSm92sA2LhzTnv6FXhCoENb3huf5+fDuNOg1LNvGOouy3u/225qxmuJvcV3IZK5Q==}
     peerDependencies:
@@ -2176,8 +2203,20 @@ packages:
       svelte:
         optional: true
 
+  svelte-konva@1.0.1:
+    resolution: {integrity: sha512-XfiSF9+J9phRupYGzMfbp46dnqsgZfN3Fwqei4YVAy0/9dr7k/qGtEucOqEcwgL1GEI2rxwSFXH0S5zbZqyMJQ==}
+    peerDependencies:
+      konva: 8 - 10
+      svelte: ^5.0.0
+
   svelte-toolbelt@0.10.6:
     resolution: {integrity: sha512-YWuX+RE+CnWYx09yseAe4ZVMM7e7GRFZM6OYWpBKOb++s+SQ8RBIMMe+Bs/CznBMc0QPLjr+vDBxTAkozXsFXQ==}
+    engines: {node: '>=18', pnpm: '>=8.7.0'}
+    peerDependencies:
+      svelte: ^5.30.2
+
+  svelte-toolbelt@0.9.3:
+    resolution: {integrity: sha512-HCSWxCtVmv+c6g1ACb8LTwHVbDqLKJvHpo6J8TaqwUme2hj9ATJCpjCPNISR1OCq2Q4U1KT41if9ON0isINQZw==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
     peerDependencies:
       svelte: ^5.30.2
@@ -3793,6 +3832,8 @@ snapshots:
 
   known-css-properties@0.37.0: {}
 
+  konva@10.2.0: {}
+
   kysely@0.27.6: {}
 
   levn@0.4.1:
@@ -3903,6 +3944,12 @@ snapshots:
   p-locate@5.0.0:
     dependencies:
       p-limit: 3.1.0
+
+  paneforge@1.0.2(svelte@5.51.3):
+    dependencies:
+      runed: 0.23.4(svelte@5.51.3)
+      svelte: 5.51.3
+      svelte-toolbelt: 0.9.3(svelte@5.51.3)
 
   parent-module@1.0.1:
     dependencies:
@@ -4035,6 +4082,16 @@ snapshots:
       '@rollup/rollup-win32-x64-msvc': 4.57.1
       fsevents: 2.3.3
 
+  runed@0.23.4(svelte@5.51.3):
+    dependencies:
+      esm-env: 1.2.2
+      svelte: 5.51.3
+
+  runed@0.29.2(svelte@5.51.3):
+    dependencies:
+      esm-env: 1.2.2
+      svelte: 5.51.3
+
   runed@0.35.1(@sveltejs/kit@2.52.0(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.51.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)))(svelte@5.51.3)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)))(svelte@5.51.3):
     dependencies:
       dequal: 2.0.3
@@ -4119,6 +4176,11 @@ snapshots:
     optionalDependencies:
       svelte: 5.51.3
 
+  svelte-konva@1.0.1(konva@10.2.0)(svelte@5.51.3):
+    dependencies:
+      konva: 10.2.0
+      svelte: 5.51.3
+
   svelte-toolbelt@0.10.6(@sveltejs/kit@2.52.0(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.51.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)))(svelte@5.51.3)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)))(svelte@5.51.3):
     dependencies:
       clsx: 2.1.1
@@ -4127,6 +4189,13 @@ snapshots:
       svelte: 5.51.3
     transitivePeerDependencies:
       - '@sveltejs/kit'
+
+  svelte-toolbelt@0.9.3(svelte@5.51.3):
+    dependencies:
+      clsx: 2.1.1
+      runed: 0.29.2(svelte@5.51.3)
+      style-to-object: 1.0.14
+      svelte: 5.51.3
 
   svelte@5.51.3:
     dependencies:

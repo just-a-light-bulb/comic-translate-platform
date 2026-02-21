@@ -14,7 +14,7 @@ _Prepared by: Nexus - Systems Analyst & Project Manager_
 
 1.2 Target Audience 3
 
-2. Reference Sample Applications 4
+1. Reference Sample Applications 4
 
 2.1 manga-image-translator 4
 
@@ -22,7 +22,7 @@ _Prepared by: Nexus - Systems Analyst & Project Manager_
 
 2.3 Key Takeaways 6
 
-3. Product Requirements 7
+1. Product Requirements 7
 
 3.1 Executive Summary 7
 
@@ -32,7 +32,7 @@ _Prepared by: Nexus - Systems Analyst & Project Manager_
 
 3.4 User Stories 10
 
-4. System Architecture 12
+1. System Architecture 12
 
 4.1 Technology Stack 12
 
@@ -42,17 +42,15 @@ _Prepared by: Nexus - Systems Analyst & Project Manager_
 
 4.4 Security & Compliance 18
 
-5. API Specifications 19
+1. API Specifications 19
 
 5.1 REST API Endpoints 19
 
 5.2 Third-Party Integrations 21
 
-6. Technical Risks 22
-
-7. Development Setup 23
-
-8. References 24
+1. Technical Risks 22
+2. Development Setup 23
+3. References 24
 
 _Note: To update page numbers, right-click the Table of Contents and select "Update Field."_
 
@@ -88,7 +86,7 @@ Repository:
 
 ### 2.1.1 Overview
 
-manga-image-translator is an open-source project designed to translate text within manga and comic images. The project originated from the need to make manga content accessible to readers who lack Japanese proficiency. It combines OCR, machine translation, and image inpainting into a unified pipeline that processes images end-to-end. The project was previously deployed at cotrans.touhou.ai, demonstrating production-ready capabilities.
+manga-image-translator is an open-source project designed to translate text within manga and comic images. The project originated from the need to make manga content accessible to readers who lack Japanese proficiency. It combines OCR, machine translation, and image inpainting into a unified pipeline that processes images end-to-end. The project was previously deployed at [cotrans.touhou.ai](http://cotrans.touhou.ai/), demonstrating production-ready capabilities.
 
 ### 2.1.2 Core Features
 
@@ -415,16 +413,18 @@ _Table 14: Authentication API Endpoints_
 
 _Table 15: Project Management API Endpoints_
 
-| **Method** | **Endpoint**                      | **Description**                                  |
-| ---------- | --------------------------------- | ------------------------------------------------ |
-| POST       | /api/v1/chapters/:id/pages/upload | Upload pages (ZIP support)                       |
-| POST       | /api/v1/pages/:id/ocr             | Trigger OCR (async, engine selectable)           |
-| POST       | /api/v1/pages/:id/translate       | Trigger translation (async, provider selectable) |
-| POST       | /api/v1/pages/:id/inpaint         | Trigger inpainting (async, method selectable)    |
-| GET        | /api/v1/pages/:id/elements        | Get all text elements                            |
-| PUT        | /api/v1/elements/:id              | Update text element                              |
-| PUT        | /api/v1/elements/batch            | Batch update elements                            |
-| GET        | /api/v1/pages/:id/export          | Export page as image                             |
+| **Method** | **Endpoint**                                            | **Description**                                                                  |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| POST       | /api/v1/projects/:id/chapters/:id/pages/upload          | Upload pages (ZIP support)                                                       |
+| POST       | /api/v1/pages/:id/ocr                                   | Trigger OCR (async, engine selectable)                                           |
+| POST       | /api/v1/translate                                       | Trigger translation (async, provider selectable) (Upload data via http req body) |
+| POST       | /api/v1/inpaint                                         | Trigger inpainting (async, method selectable) (Upload data via http req body)    |
+| GET        | /api/v1/projects/:id/chapters/:id/elements/:id/elements | Get all text elements                                                            |
+| PUT        | /api/v1/projects/:id/chapters/:id/elements/:id          | Update text element                                                              |
+| PUT        | /api/v1/projects/:id/chapters/:id/elements/batch        | Batch update elements                                                            |
+| GET        | /api/v1/projects/:id/chapters/:id/pages/:id/export      | Export page as image                                                             |
+| GET        | /api/v1/projects/:id/chapters/:id/export                | Export pages as zip or pdf                                                       |
+| GET        | /api/v1/projects/:id/chapters/                          | Export chapters pages as zips or pdfs                                            |
 
 _Table 16: Page & Text Element API Endpoints_
 
@@ -432,7 +432,7 @@ _Table 16: Page & Text Element API Endpoints_
 
 | **Service**    | **Provider**          | **Purpose**          |
 | -------------- | --------------------- | -------------------- |
-| Authentication | Stack Auth            | User auth & sessions |
+| Authentication | kinde Auth            | User auth & sessions |
 | File Storage   | Uploadcare            | Image upload & CDN   |
 | Database       | PostgreSQL + Drizzle  | Data persistence     |
 | AI Gateway     | OpenRouter            | LLM API access       |
@@ -470,6 +470,26 @@ _Table 18: Technical Risks and Mitigation_
 
 _Table 19: Available NPM Scripts_
 
+## 7.2 .Env.(example)
+
+```jsx
+# Drizzle
+# Replace with your DB credentials!
+DATABASE_URL="postgres://user:password@host:port/db-name"
+
+# Kinde Authentication
+# Get these from https://app.kinde.com/admin/settings/applications
+KINDE_CLIENT_ID=<your-kinde-client-id>
+KINDE_CLIENT_SECRET=<your-kinde-client-secret>
+KINDE_ISSUER_URL=https://<your-subdomain>.kinde.com
+KINDE_REDIRECT_URL=http://localhost:5173/api/auth/kinde_callback
+KINDE_POST_LOGOUT_REDIRECT_URL=http://localhost:5173
+KINDE_POST_LOGIN_REDIRECT_URL=http://localhost:5173
+
+# File Storage
+UPLOADCARE_PUBLIC_KEY=""
+```
+
 # 8. References
 
 ## 8.1 Reference Sample Applications
@@ -488,7 +508,7 @@ _Table 19: Available NPM Scripts_
 
 [6] Vitest Documentation - https://vitest.dev/guide/
 
-[7] Stack Auth Documentation - https://stack-auth.com/docs
+[7] kinde Auth Documentation - https://docs.kinde.com/authenticate/about-auth/about-authentication/
 
 [8] Uploadcare Documentation - https://uploadcare.com/docs/
 

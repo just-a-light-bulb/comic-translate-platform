@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ActionData, PageData } from './$types';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Card from '$lib/components/ui/card/card.svelte';
 	import CardContent from '$lib/components/ui/card/card-content.svelte';
@@ -18,7 +18,7 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-5xl space-y-6 px-4 py-10">
-	<a href="{base}/projects" class="text-sm text-muted-foreground hover:underline"
+	<a href={resolve('/projects')} class="text-sm text-muted-foreground hover:underline"
 		>← Back to projects</a
 	>
 
@@ -75,7 +75,10 @@
 					{#each data.chapters as item (item.id)}
 						<div class="rounded-lg border p-4">
 							<div class="flex items-center justify-between gap-3">
-								<a href="{base}/chapter/{item.id}" class="font-medium hover:underline">
+								<a
+									href={resolve(`/project/${data.project.id}/chapter/${item.id}`)}
+									class="font-medium hover:underline"
+								>
 									Chapter {item.chapterNumber}: {item.title}
 								</a>
 								<form method="POST" action="?/deleteChapter">

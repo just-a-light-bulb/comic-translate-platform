@@ -28,6 +28,41 @@ export const chapter = pgTable('chapter', {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 });
 
+export const page = pgTable('page', {
+	id: serial('id').primaryKey(),
+	chapterId: integer('chapter_id')
+		.notNull()
+		.references(() => chapter.id, { onDelete: 'cascade' }),
+	pageNumber: integer('page_number').notNull().default(1),
+	imageUrl: text('image_url').notNull(),
+	width: integer('width').notNull().default(800),
+	height: integer('height').notNull().default(1100),
+	ocrStatus: text('ocr_status').notNull().default('pending'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+export const textElement = pgTable('text_element', {
+	id: serial('id').primaryKey(),
+	pageId: integer('page_id')
+		.notNull()
+		.references(() => page.id, { onDelete: 'cascade' }),
+	x: integer('x').notNull().default(0),
+	y: integer('y').notNull().default(0),
+	width: integer('width').notNull().default(100),
+	height: integer('height').notNull().default(30),
+	rotation: integer('rotation').notNull().default(0),
+	originalText: text('original_text').notNull().default(''),
+	translatedText: text('translated_text').default(''),
+	fontFamily: text('font_family').notNull().default('Arial'),
+	fontSize: integer('font_size').notNull().default(16),
+	fontWeight: text('font_weight').notNull().default('normal'),
+	fontStyle: text('font_style').notNull().default('normal'),
+	textAlign: text('text_align').notNull().default('center'),
+	fill: text('fill').notNull().default('#000000'),
+	status: text('status').notNull().default('pending'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
 export const accountProfile = pgTable('account_profile', {
 	id: serial('id').primaryKey(),
 	userId: text('user_id').notNull().unique(),
