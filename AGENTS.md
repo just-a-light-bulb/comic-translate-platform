@@ -9,6 +9,7 @@ You can gathering more infomation in `./.docs/*`
 ## Dev environment tips
 
 - Use `pnpm dlx shadcn-svelte@latest add <component>` for add new shadcn/svelte UI component
+- Prefer existing libraries over building from scratch. Before implementing any UI feature (e.g., resizable panels), check if shadcn/svelte or another well-maintained library already provides it (e.g., https://ui.shadcn.com/docs/components/radix/resizable). Using battle-tested libraries reduces bugs and maintenance burden.
 - Run `pnpm install` to add the package to your workspace so Vite, ESLint, and TypeScript can see it.
 - Always run `pnpm run lint` for check code problem and format of code
 - If `pnpm run lint` fails, you must fix all lint errors before finishing the task
