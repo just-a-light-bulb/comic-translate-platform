@@ -9,6 +9,7 @@
 	import CardHeader from '$lib/components/ui/card/card-header.svelte';
 	import CardTitle from '$lib/components/ui/card/card-title.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import { PaneGroup, Pane, Handle } from '$lib/components/ui/resizable';
 	import CanvasEditor from '$lib/components/canvas-editor/CanvasEditor.svelte';
 	import TranslationGrid from '$lib/components/canvas-editor/TranslationGrid.svelte';
 	import { canvasStore } from '$lib/components/canvas-editor/stores';
@@ -23,8 +24,6 @@
 	const statuses = ['draft', 'in_progress', 'review', 'done'];
 
 	let showEditor = $state(true);
-	let showGrid = $state(true);
-	let gridHeight = $state(250);
 	let selectedPageId = $state<number | null>(null);
 	let currentElements = $state<TextElement[]>([]);
 	let pages = $state(data.pages);
@@ -125,19 +124,6 @@
 					status: updates.translatedContent ? 'translated' : 'pending'
 				})
 			});
-		}
-	}
-
-	function handleDragStart(e: DragEvent) {
-		if (!e.dataTransfer) return;
-		e.dataTransfer.setData('text/plain', '');
-	}
-
-	function handleDrag(e: DragEvent) {
-		if (!e.dataTransfer) return;
-		const rect = (e.target as HTMLElement).parentElement?.getBoundingClientRect();
-		if (rect) {
-			gridHeight = Math.max(100, rect.height - e.clientY);
 		}
 	}
 
@@ -258,7 +244,7 @@
 					onchange={handleFileUpload}
 					disabled={isUploading}
 				/>
-				<Button variant="outline" size="sm" asChild={false} disabled={isUploading}>
+				<Button variant="outline" size="sm" disabled={isUploading}>
 					<UploadIcon class="mr-2 h-4 w-4" />
 					{isUploading ? 'Uploading...' : 'Upload Pages'}
 				</Button>
@@ -353,7 +339,7 @@
 									onchange={handleFileUpload}
 									disabled={isUploading}
 								/>
-								<Button asChild={false} disabled={isUploading}>
+								<Button disabled={isUploading}>
 									<UploadIcon class="mr-2 h-4 w-4" />
 									{isUploading ? 'Uploading...' : 'Upload Pages'}
 								</Button>
@@ -361,49 +347,31 @@
 						</div>
 					</div>
 				{:else}
-					<!-- Canvas Editor -->
-					<div class="flex-1 overflow-hidden bg-gray-100">
-						<CanvasEditor
-							width={selectedPage?.width ?? 800}
-							height={selectedPage?.height ?? 600}
-							backgroundImage={selectedPage?.imageUrl}
-						/>
-					</div>
-
-					<!-- Resizer -->
-					{#if showGrid}
-						<div
-							class="h-2 cursor-row-resize bg-gray-200 transition-colors hover:bg-blue-300"
-							role="separator"
-							aria-orientation="horizontal"
-							ondragstart={handleDragStart}
-							ondrag={handleDrag}
-							draggable="true"
-						></div>
-					{/if}
-
-					<!-- Translation Grid -->
-					{#if showGrid}
-						<div class="border-t bg-white" style="height: {gridHeight}px;">
-							<div class="flex items-center justify-between border-b bg-gray-50 px-4 py-2">
-								<span class="text-sm font-medium"
-									>Translation Grid ({currentElements.length} elements)</span
-								>
-								<Button variant="ghost" size="sm" onclick={() => (showGrid = false)}>
-									↓ Collapse
-								</Button>
+					<!-- Canvas Editor + Translation Grid with Resizable -->
+					<PaneGroup class="flex-1" direction="vertical">
+						<Pane defaultSize={70} minSize={30}>
+							<div class="h-full overflow-hidden bg-gray-100">
+								<CanvasEditor
+									width={selectedPage?.width ?? 800}
+									height={selectedPage?.height ?? 600}
+									backgroundImage={selectedPage?.imageUrl}
+								/>
 							</div>
-							<div class="h-[calc(100%-40px)]">
-								<TranslationGrid elements={currentElements} onUpdate={handleElementUpdate} />
+						</Pane>
+						<Handle withHandle />
+						<Pane defaultSize={30} minSize={10}>
+							<div class="flex h-full flex-col bg-white">
+								<div class="flex items-center justify-between border-b bg-gray-50 px-4 py-2">
+									<span class="text-sm font-medium"
+										>Translation Grid ({currentElements.length} elements)</span
+									>
+								</div>
+								<div class="flex-1 overflow-hidden">
+									<TranslationGrid elements={currentElements} onUpdate={handleElementUpdate} />
+								</div>
 							</div>
-						</div>
-					{:else}
-						<div class="border-t bg-white p-2">
-							<Button variant="ghost" size="sm" onclick={() => (showGrid = true)}>
-								↑ Show Translation Grid
-							</Button>
-						</div>
-					{/if}
+						</Pane>
+					</PaneGroup>
 				{/if}
 			</div>
 		</div>

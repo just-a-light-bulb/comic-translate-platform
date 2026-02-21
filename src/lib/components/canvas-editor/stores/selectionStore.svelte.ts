@@ -18,9 +18,6 @@ function createSelectionStore() {
 		get hasSelection() {
 			return selectedIds.size > 0;
 		},
-		get isMultiSelect() {
-			return selectedIds.size > 1;
-		},
 		get singleSelectedId() {
 			if (selectedIds.size === 1) {
 				return Array.from(selectedIds)[0];
@@ -34,10 +31,6 @@ function createSelectionStore() {
 
 		select(id: string) {
 			selectedIds = new SvelteSet([id]);
-		},
-
-		selectMultiple(ids: string[]) {
-			selectedIds = new SvelteSet(ids);
 		},
 
 		addToSelection(id: string) {
@@ -62,10 +55,6 @@ function createSelectionStore() {
 
 		isSelected(id: string) {
 			return selectedIds.has(id);
-		},
-
-		selectAll(ids: string[]) {
-			selectedIds = new SvelteSet(ids);
 		}
 	};
 }

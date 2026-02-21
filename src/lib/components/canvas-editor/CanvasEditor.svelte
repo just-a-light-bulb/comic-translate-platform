@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Canvas from './canvas/Canvas.svelte';
-	import Toolbar from './toolbar/Toolbar.svelte';
+	import { Canvas } from './canvas';
+	import { Toolbar } from './toolbar';
 
 	interface Props {
 		width?: number;
@@ -13,7 +13,7 @@
 
 <div class="flex h-full flex-col">
 	<Toolbar />
-	<div class="flex flex-1 items-center justify-center overflow-hidden bg-gray-200">
+	<div class="relative flex-1 overflow-hidden">
 		<Canvas {width} {height} {backgroundImage} />
 	</div>
 </div>

@@ -39,23 +39,11 @@ export interface TextElement extends BaseElement {
 	text: TextProperties;
 }
 
-export interface ImageProperties {
-	src: string;
-	naturalWidth: number;
-	naturalHeight: number;
-}
-
-export interface ImageElement extends BaseElement {
-	type: 'image';
-	image: ImageProperties;
-}
-
 export interface ShapeProperties {
-	shapeType: 'rectangle' | 'ellipse' | 'line' | 'arrow';
+	shapeType: 'rectangle' | 'ellipse' | 'line';
 	fill: string;
 	stroke: string;
 	strokeWidth: number;
-	cornerRadius: number;
 }
 
 export interface ShapeElement extends BaseElement {
@@ -63,27 +51,25 @@ export interface ShapeElement extends BaseElement {
 	shape: ShapeProperties;
 }
 
-export type CanvasElement = TextElement | ImageElement | ShapeElement;
-
-export interface CanvasState {
-	elements: CanvasElement[];
-	selectedIds: string[];
-	zoom: number;
-	panX: number;
-	panY: number;
-	width: number;
-	height: number;
+export interface ImageProperties {
+	src: string;
 }
 
-// Helper functions for type guards
+export interface ImageElement extends BaseElement {
+	type: 'image';
+	image: ImageProperties;
+}
+
+export type CanvasElement = TextElement | ShapeElement | ImageElement;
+
 export function isTextElement(element: CanvasElement): element is TextElement {
 	return element.type === 'text';
 }
 
-export function isImageElement(element: CanvasElement): element is ImageElement {
-	return element.type === 'image';
-}
-
 export function isShapeElement(element: CanvasElement): element is ShapeElement {
 	return element.type === 'shape';
+}
+
+export function isImageElement(element: CanvasElement): element is ImageElement {
+	return element.type === 'image';
 }

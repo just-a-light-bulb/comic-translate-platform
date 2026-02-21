@@ -13,8 +13,8 @@ function generateId(): string {
 function createCanvasStore() {
 	let elements = $state<CanvasElement[]>([]);
 	let backgroundImage = $state<string | null>(null);
-	let stageWidth = $state(800);
-	let stageHeight = $state(600);
+	let canvasWidth = $state(800);
+	let canvasHeight = $state(600);
 
 	return {
 		get elements() {
@@ -23,19 +23,19 @@ function createCanvasStore() {
 		get backgroundImage() {
 			return backgroundImage;
 		},
-		get stageWidth() {
-			return stageWidth;
+		get canvasWidth() {
+			return canvasWidth;
 		},
-		get stageHeight() {
-			return stageHeight;
+		get canvasHeight() {
+			return canvasHeight;
 		},
 		get sortedElements() {
 			return [...elements].sort((a, b) => a.zIndex - b.zIndex);
 		},
 
-		setStageDimensions(w: number, h: number) {
-			stageWidth = w;
-			stageHeight = h;
+		setDimensions(w: number, h: number) {
+			canvasWidth = w;
+			canvasHeight = h;
 		},
 
 		setBackgroundImage(src: string | null) {
@@ -107,8 +107,7 @@ function createCanvasStore() {
 				shapeType: options.shapeType,
 				fill: 'transparent',
 				stroke: '#000000',
-				strokeWidth: 2,
-				cornerRadius: 0
+				strokeWidth: 2
 			};
 
 			const newElement: ShapeElement = {
@@ -148,18 +147,6 @@ function createCanvasStore() {
 			});
 		},
 
-		updateShapeElement(id: string, shapeUpdates: Partial<ShapeProperties>) {
-			elements = elements.map((el) => {
-				if (el.id === id && el.type === 'shape') {
-					return {
-						...el,
-						shape: { ...el.shape, ...shapeUpdates }
-					} as ShapeElement;
-				}
-				return el;
-			});
-		},
-
 		deleteElement(id: string) {
 			elements = elements.filter((el) => el.id !== id);
 		},
@@ -172,33 +159,12 @@ function createCanvasStore() {
 			return elements.find((el) => el.id === id);
 		},
 
-		getElementsByIds(ids: string[]) {
-			return elements.filter((el) => ids.includes(el.id));
-		},
-
 		setElements(newElements: CanvasElement[]) {
 			elements = newElements;
 		},
 
 		clearElements() {
 			elements = [];
-		},
-
-		bringToFront(id: string) {
-			const element = elements.find((el) => el.id === id);
-			if (!element) return;
-			const filtered = elements.filter((el) => el.id !== id);
-			elements = [...filtered, { ...element, zIndex: filtered.length }];
-		},
-
-		sendToBack(id: string) {
-			const element = elements.find((el) => el.id === id);
-			if (!element) return;
-			const filtered = elements.filter((el) => el.id !== id);
-			elements = [
-				{ ...element, zIndex: 0 },
-				...filtered.map((el, i) => ({ ...el, zIndex: i + 1 }))
-			];
 		},
 
 		getState(): CanvasElement[] {
